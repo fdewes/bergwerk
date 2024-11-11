@@ -1,0 +1,32 @@
+[[Category:Content]]
+
+= Deutsch =
+== Markdown ==
+<markdown>
+**Willkommen bei Ihrem Bergwerk-Beispiel-Chatbot!**  *Ich bin hier, um Ihnen das Leben leichter zu machen.* 
+ 
+Ob Sie **Fragen** haben, **Unterstützung** benötigen oder einfach nur **erkunden** möchten – ich bin bereit, Ihnen zu helfen.  
+</markdown>
+
+== Buttons ==
+
+* [[Products|Produkte]]
+* [[Customers|Kundenportal]]
+
+
+= English =
+== Markdown ==
+<markdown>
+**Welcome to your Bergwerk example chatbot!**  *I’m here to make things easier for you.*  
+
+Whether you have **questions**, need **assistance**, or just want to **explore**, I’m ready to help.  
+</markdown>
+
+== Buttons ==
+
+* [[Products|Products]]
+* [[Customers|Customers]]
+
+
+
+

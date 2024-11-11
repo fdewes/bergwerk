@@ -1,0 +1,6 @@
+python-socketio
+sanic
+requests
+aiohttp
+watchfiles
+icecream

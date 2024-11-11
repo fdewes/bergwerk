@@ -1,0 +1,13 @@
+-- init-template.sql
+
+-- Create the two databases
+CREATE DATABASE IF NOT EXISTS wiki_db;
+CREATE DATABASE IF NOT EXISTS tracker_db;
+
+-- Create user and grant privileges
+CREATE USER IF NOT EXISTS 'MYSQL_USER_PLACEHOLDER'@'%' IDENTIFIED BY 'MYSQL_PASS_PLACEHOLDER';
+GRANT ALL PRIVILEGES ON wiki_db.* TO 'MYSQL_USER_PLACEHOLDER'@'%';
+GRANT ALL PRIVILEGES ON tracker_db.* TO 'MYSQL_USER_PLACEHOLDER'@'%';
+
+-- Apply changes
+FLUSH PRIVILEGES;

@@ -1,0 +1,27 @@
+[[Category:Content]]
+
+= Deutsch =
+== Markdown ==
+<markdown> 
+Ob Sie **Fragen** haben, **Unterstützung** benötigen oder einfach nur **erkunden** möchten – ich bin bereit, Ihnen zu helfen.  
+</markdown>
+
+== Buttons ==
+
+* [[Products|Produkte]]
+* [[Customers|Kundenportal]]
+
+
+= English =
+== Markdown ==
+<markdown>
+Whether you have **questions**, need **assistance**, or just want to **explore**, I’m ready to help.  
+</markdown>
+
+== Buttons ==
+
+* [[Products|Products]]
+* [[Customers|Customers]]
+
+
+

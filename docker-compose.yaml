@@ -1,0 +1,95 @@
+services:
+  bergwerk-wiki:
+    env_file:
+      - config.env
+    build:
+      context: ./bergwerk-wiki
+    container_name: bergwerk-wiki
+    networks:
+      - netzwerk
+    depends_on:
+      bergwerk-db:
+        condition: service_started
+
+  bergwerk-api:
+    env_file:
+      - config.env
+    build:
+      context: ./bergwerk-api
+    container_name: bergwerk-api
+    volumes:
+      - ./bergwerk-api/app:/app  
+    networks:
+      - netzwerk
+    depends_on:
+      bergwerk-wiki:
+        condition: service_started
+
+  bergwerk-socketio:
+    build:
+      context: ./bergwerk-socketio
+    container_name: bergwerk-socketio
+    volumes:
+      - ./bergwerk-socketio/app:/app
+    networks:
+      - netzwerk
+    depends_on:
+      bergwerk-wiki:
+        condition: service_started
+      bergwerk-api:
+        condition: service_started
+
+
+  bergwerk-caddy:
+    image: caddy:latest
+    env_file:
+      - config.env
+    container_name: bergwerk-caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./bergwerk-caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./bergwerk-caddy/html:/var/www/html
+    networks:
+      - netzwerk
+    depends_on:
+      bergwerk-wiki:
+        condition: service_started
+      bergwerk-api:
+        condition: service_started
+      bergwerk-socketio:
+        condition: service_started
+
+
+  bergwerk-db:
+    env_file:
+      - config.env
+    build:
+      context: ./bergwerk-db
+    container_name: bergwerk-db
+
+    ports:
+      - "3306:3306"
+    networks:
+      - netzwerk
+
+  bergwerk-cron:
+    env_file:
+      - config.env
+    build:
+      context: ./bergwerk-cron
+    container_name: bergwerk-cron
+    networks:
+      - netzwerk
+    depends_on:
+      bergwerk-db:
+        condition: service_started
+      bergwerk-wiki:
+        condition: service_started
+
+
+networks:
+  netzwerk:
+    driver: bridge
+  

@@ -1,0 +1,25 @@
+<html>
+<body>
+<script>!(function () {
+  let e = document.createElement("script"),
+    t = document.head || document.getElementsByTagName("head")[0];
+  (e.src =
+    "index.js"),
+    (e.async = !0),
+    (e.onload = () => {
+      window.WebChat.default(
+        {
+          customData: { language: "de" },
+          socketUrl: "http://localhost",
+          title: "HTW Chatbot",
+          inputTextFieldHint: "Hier tippen...",
+          initPayload: "Hallo"
+        },
+        null
+      );
+    }),
+    t.insertBefore(e, t.firstChild);
+})();
+</script>
+</body>
+</html>

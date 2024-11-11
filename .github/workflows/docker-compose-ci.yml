@@ -1,0 +1,40 @@
+name: Docker Compose Build Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build bergwerk-wiki image
+        run: |
+          docker build -t bergwerk-wiki ./bergwerk-wiki
+
+      # - name: Build bergwerk-api image
+      #   run: |
+      #     docker build -t bergwerk-api ./bergwerk-api
+
+      - name: Build bergwerk-socketio image
+        run: |
+          docker build -t bergwerk-socketio ./bergwerk-socketio
+
+      - name: Build bergwerk-db image
+        run: |
+          docker build -t bergwerk-db ./bergwerk-db
+
+      - name: Build bergwerk-cron image
+        run: |
+          docker build -t bergwerk-cron ./bergwerk-cron
