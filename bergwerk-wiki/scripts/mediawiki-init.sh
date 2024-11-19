@@ -29,7 +29,7 @@ echo "\$wgGroupPermissions['*']['createaccount'] = false;" >> $WIKI_DIR/LocalSet
 echo "\$wgHiddenPrefs[] = 'language';" >> $WIKI_DIR/LocalSettings.php
 echo "\$wgHiddenPrefs[] = 'variant';" >> $WIKI_DIR/LocalSettings.php
 echo "\$wgHiddenPrefs[] = 'noconvertlink';" >> $WIKI_DIR/LocalSettings.php
-echo "\$wgLanguageCode = 'en';" >> $WIKI_DIR/LocalSettings.php
+echo "\$wgLanguageCode = 'de';" >> $WIKI_DIR/LocalSettings.php
 echo "\$wgRateLimits['edit']['user'] = [ 1000, 60 ];" >> $WIKI_DIR/LocalSettings.php
 
 git clone https://github.com/kuenzign/WikiMarkdown.git $WIKI_DIR/extensions/WikiMarkdown
