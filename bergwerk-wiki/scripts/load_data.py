@@ -1,6 +1,7 @@
 import os
 import sys
 import requests
+from time import sleep
 
 API_URL = 'http://bergwerk-wiki/w/api.php'
 USERNAME = os.getenv('BOT_USERNAME')
@@ -60,7 +61,16 @@ def create_or_update_page(session, csrf_token, title, content):
 
 
 def main():
-    session = login()
+
+    connected = False
+
+    while not connected:
+        try:
+            session = login()
+            connected = True
+        except:
+            print("Error logging in. retrying in 5 secs...")
+            sleep(5)
     csrf_token = get_csrf_token(session)
 
     for filename in os.listdir('/tmp/data'):

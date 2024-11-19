@@ -5,10 +5,13 @@ ENV MEDIAWIKI_ADMIN_PASSWORD ${MEDIAWIKI_ADMIN_PASSWORD}
 
 RUN apt-get update && apt-get install -y cron
 WORKDIR /usr/src/app
-COPY tracker.py .
+COPY scripts/tracker.py .
+COPY scripts/check_content.py .
+COPY scripts/env.sh .
 COPY requirements.txt .
-COPY env.sh .
+
 RUN chmod 755 env.sh
+
 
 RUN pip install -r requirements.txt
 

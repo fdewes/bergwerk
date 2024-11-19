@@ -9,7 +9,7 @@ services:
       - netzwerk
     depends_on:
       bergwerk-db:
-        condition: service_started
+        condition: service_healthy
 
   bergwerk-api:
     env_file:
@@ -73,6 +73,10 @@ services:
       - "3306:3306"
     networks:
       - netzwerk
+    healthcheck:
+        test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+        timeout: 20s
+        retries: 10
 
   bergwerk-cron:
     env_file:
@@ -83,10 +87,10 @@ services:
     networks:
       - netzwerk
     depends_on:
-      bergwerk-db:
-        condition: service_started
       bergwerk-wiki:
         condition: service_started
+      bergwerk-db:
+        condition: service_healthy
 
 
 networks:
