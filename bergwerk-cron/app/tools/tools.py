@@ -1,33 +1,21 @@
-import pandas as pd
 from sqlalchemy import create_engine
+import pandas as pd
 import requests
 import os
 
 
-print("Running tracker cron!")
-
-BOT_USERNAME = os.getenv('BOT_USERNAME')
-BOT_PASSWORD = os.getenv('BOT_PASSWORD')
-SQL_USER = os.getenv('SQL_USER')
-SQL_PASS = os.getenv('SQL_PASS')
-
-HOST = "http://bergwerk-wiki/w"
-
-PREAMBLE = "[[Category:Tracker]]\n"
-
-def sql2pd(host, database, user, password, table):
-    connection_string = f"mysql+mysqlconnector://{user}:{password}@{host}/{database}"
+def sql2pd(database, table):
+    user = os.getenv('SQL_USER')
+    password = os.getenv('SQL_PASS')
+    connection_string = f"mysql+mysqlconnector://{user}:{password}@bergwerk-db/{database}"
     engine = create_engine(connection_string)
     df = pd.read_sql_table(table, con=engine)
     return df
 
-
-
-def login(host: str):
-    url = host + "/api.php"
+def login():
+    url = "http://bergwerk-wiki/w/api.php"
     session = requests.Session()
 
-    # Get login token
     response = session.get(url, params={
         'action': 'query',
         'meta': 'tokens',
@@ -36,11 +24,13 @@ def login(host: str):
     })
     login_token = response.json()['query']['tokens']['logintoken']
 
-    # Log in
+    user = os.getenv('BOT_USERNAME')
+    password = os.getenv('BOT_PASSWORD')
+
     response = session.post(url, data={
         'action': 'login',
-        'lgname': BOT_USERNAME,
-        'lgpassword': BOT_PASSWORD,
+        'lgname': user,
+        'lgpassword': password,
         'lgtoken': login_token,
         'format': 'json'
     })
@@ -51,8 +41,8 @@ def login(host: str):
     return session
 
 
-def get_entire_page(host: str, page: str):
-    url = host + "/api.php"
+def get_entire_page(page: str):
+    url = "http://bergwerk-wiki/w/api.php"
 
     page_params = {
         'action': 'parse',
@@ -71,21 +61,20 @@ def get_entire_page(host: str, page: str):
 
     return page_text
 
-def get_csrf_token(host, session):
+def get_csrf_token(session):
 
-    URL = host + "/api.php"
-    response = session.get(URL, params={
+    url = "http://bergwerk-wiki/w/api.php"
+    response = session.get(url, params={
         'action': 'query',
         'meta': 'tokens',
         'format': 'json'
     })
     return response.json()['query']['tokens']['csrftoken']
 
-def create_or_update_page(host, title, content):
-    session = login(host)
-    csrf_token = get_csrf_token(host, session)
-    URL = host + "/api.php"
-    response = session.post(URL, data={
+def create_or_update_page(title, content):
+    csrf_token = get_csrf_token(session)
+    url = "http://bergwerk-wiki/w/api.php"
+    response = session.post(url, data={
         'action': 'edit',
         'title': title,
         'text': content,
@@ -130,32 +119,4 @@ def gen_overview_page(df):
     return dft, page_content
 
 
-session = login(HOST)
-
-df = sql2pd("bergwerk-db", "tracker_db", SQL_USER, SQL_PASS, "tracker")
-dft, ovp = gen_overview_page(df)
-create_or_update_page(HOST, "Tracker", ovp)
-
-for id in dft.id.values.astype(list):
-    wt = PREAMBLE
-    df_c = df[(df.id == id)].copy()
-    df_c['datetime'] = pd.to_datetime(df_c['ts'], unit = "s")
-    df_c['time'] = df_c['datetime'].dt.strftime('%H:%M')
-
-
-    conv_date_m  = dft[dft.id == id].ymd.values[0]
-    conv_date_h  = dft[dft.id == id].human_date.values[0]
-
-    title = conv_date_m + ":" + id
-    wt += f"= {conv_date_h} =\n"
-
-    for i in df_c.index:
-        line = ( 
-            "<strong>" + df_c.loc[i, "role"] + "</strong>"
-            " <small>(" +  df_c.loc[i, "time"] + "):</small> " +  
-            "<markdown>" + df_c.loc[i, "text"] + "</markdown>" +
-            df_c.loc[i, "buttons"] + "\n\n\n" )
-        
-        wt += line
-
-    create_or_update_page(HOST, title, wt)
+session = login()
