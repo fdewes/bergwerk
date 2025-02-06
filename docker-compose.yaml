@@ -9,7 +9,7 @@ services:
       - netzwerk
     depends_on:
       bergwerk-db:
-        condition: service_started
+        condition: service_healthy
 
   bergwerk-api:
     env_file:
@@ -51,6 +51,8 @@ services:
     volumes:
       - ./bergwerk-caddy/Caddyfile:/etc/caddy/Caddyfile
       - ./bergwerk-caddy/html:/var/www/html
+      - ./persist/caddy_data:/data
+      - ./persist/caddy_config:/config
     networks:
       - netzwerk
     depends_on:
@@ -68,11 +70,16 @@ services:
     build:
       context: ./bergwerk-db
     container_name: bergwerk-db
-
     ports:
       - "3306:3306"
+    volumes:
+      - ./persist/db_data:/var/lib/mysql
     networks:
       - netzwerk
+    healthcheck:
+        test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+        timeout: 20s
+        retries: 10
 
   bergwerk-cron:
     env_file:
@@ -80,13 +87,15 @@ services:
     build:
       context: ./bergwerk-cron
     container_name: bergwerk-cron
+    volumes:
+      - ./bergwerk-cron/app:/usr/src/app
     networks:
       - netzwerk
     depends_on:
-      bergwerk-db:
-        condition: service_started
       bergwerk-wiki:
         condition: service_started
+      bergwerk-db:
+        condition: service_healthy
 
 
 networks:

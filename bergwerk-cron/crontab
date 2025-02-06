@@ -1,3 +1,4 @@
 # crontab
 
 1 * * * * bash -c "/usr/local/bin/python /usr/src/app/tracker.py >> /var/log/cron.log 2>&1"
+*/10 * * * * bash -c "/usr/local/bin/python /usr/src/app/check_content.py >> /var/log/cron.log 2>&1"
