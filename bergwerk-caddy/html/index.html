@@ -38,6 +38,7 @@
             flex-grow: 1;
             padding: 15px;
             background-color: #fff;
+            position: relative;
         }
 
         .chat-frame {
@@ -114,7 +115,7 @@
             e.src = "index.js";
             e.async = true;
             e.onload = () => {
-                const sidebar = document.getElementById("right-sidebar");
+                const content = document.querySelector(".content");
                 const chatFrame = document.createElement("div");
                 chatFrame.classList.add("chat-frame");
 
@@ -131,7 +132,7 @@
 
                 chatFrame.appendChild(header);
                 chatFrame.appendChild(chatContainer);
-                sidebar.appendChild(chatFrame);
+                content.appendChild(chatFrame);
 
                 window.WebChat.default(
                     {
@@ -140,6 +141,12 @@
                         socketUrl: "http://localhost",
                         inputTextFieldHint: "Hier tippen...",
                         initPayload: "Hallo",
+                        customMessageDelay: (message) => {
+                            let delay = message.length * 2;
+                            if (delay > 500) delay = 500;
+                            if (delay < 100) delay = 100;
+                            return delay;
+                        },
                     },
                     chatContainer
                 );

@@ -184,3 +184,4 @@ bergwerk-api/data/intent_classifier copy/ic/vocab.txt
 helpers/export20241111.pkl
 persist/*
 example_data.json
+config.env
