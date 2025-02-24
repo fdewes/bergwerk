@@ -3,30 +3,27 @@
 = Deutsch =
 == Markdown ==
 <markdown>
-**Willkommen bei Ihrem Bergwerk-Beispiel-Chatbot!**  *Ich bin hier, um Ihnen das Leben leichter zu machen.* 
- 
-Ob Sie **Fragen** haben, **Unterstützung** benötigen oder einfach nur **erkunden** möchten – ich bin bereit, Ihnen zu helfen.  
-</markdown>
+**Hallo! Ich bin der digitale Assistent des Service-Centers** der virtuellen Hochschule für Wissenschaft und kümmere mich um **Fragen und Anliegen von Bewerber:innen und Studierenden**.
+
+Bitte wählen Sie ein Themengebiet über die Buttons. Alternativ können Sie auch Ihre Fragen in das Textfeld tippen.</markdown>
 
 == Buttons ==
-
-* [[Products|Produkte]]
-* [[Customers|Kundenportal]]
-
+* [[Students|Studierende]]
+* [[Applicants|Bewerber*innen]]
+* [[Info|Chatbot-Info]]
 
 = English =
 == Markdown ==
 <markdown>
-**Welcome to your Bergwerk example chatbot!**  *I’m here to make things easier for you.*  
+**Hello! I am the digital assistant of the Service Center** at the virtual University of Sciences, and I handle **questions and concerns from applicants and students**.
 
-Whether you have **questions**, need **assistance**, or just want to **explore**, I’m ready to help.  
-</markdown>
+Please select a topic using the buttons. Alternatively, you can also type your question in the text field.</markdown>
+
 
 == Buttons ==
+* [[Info|Chatbot Info]]
+* [[Students|Students]]
+* [[Applicants|Applicants]]
 
-* [[Products|Products]]
-* [[Customers|Customers]]
-
-
-
+= Training Questions =
 
