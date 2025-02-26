@@ -1,0 +1,14 @@
+[[Category:Content]]
+= Deutsch =
+== Markdown ==
+<markdown>
+Hier gibt es weitere Informationen zum letzten Semester und zu Ihrer Abschlussarbeit:
+</markdown>
+
+= English =
+== Markdown ==
+<markdown>
+Here is further information regarding the last semester and your thesis:</markdown>
+
+
+= Training Questions = 
