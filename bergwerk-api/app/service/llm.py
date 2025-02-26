@@ -28,7 +28,7 @@ def llm_training_data():
 
         print()
         full_page = wikidata.get_entire_page("http://wiki/w", p)
-        full_page += r['response']
+        full_page += "\n= Training Questions =\n" + r['response']
 
         wikidata.create_or_update_page("http://wiki/w", p, full_page)
 
