@@ -9,7 +9,7 @@ import pandas as pd
 from datetime import datetime
 import re
 
-HOST = "http://bergwerk-wiki/w"
+HOST = "http://wiki/w"
 
 
 def parse_configuration(content):

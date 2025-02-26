@@ -16,5 +16,5 @@ This setup ensures that the Bergwerk Database container is optimized for secure 
 ## docker-compose.yaml
 
 ```Dockerfile
---8<-- "bergwerk-db/Dockerfile"
+--8<-- "db/Dockerfile"
 ```

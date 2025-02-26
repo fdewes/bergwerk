@@ -15,5 +15,5 @@ The API container includes key libraries and tools necessary for chatbot functio
 ## docker-compose.yaml
 
 ```Dockerfile
---8<-- "bergwerk-api/Dockerfile"
+--8<-- "api/Dockerfile"
 ```

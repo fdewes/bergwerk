@@ -9,7 +9,7 @@ from icecream import ic
 
 router = APIRouter(prefix="/admin")
 
-HOST = "http://bergwerk-wiki/w"
+HOST = "http://wiki/w"
 
 
 @router.get("")

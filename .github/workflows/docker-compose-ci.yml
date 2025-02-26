@@ -19,22 +19,22 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Build bergwerk-wiki image
+      - name: Build wiki image
         run: |
-          docker build -t bergwerk-wiki ./bergwerk-wiki
+          docker build -t wiki ./bergwerk-wiki
 
-      # - name: Build bergwerk-api image
+      # - name: Build api image
       #   run: |
-      #     docker build -t bergwerk-api ./bergwerk-api
+      #     docker build -t api ./api
 
-      - name: Build bergwerk-socketio image
+      - name: Build api image
         run: |
-          docker build -t bergwerk-socketio ./bergwerk-socketio
+          docker build -t api ./bergwerk-socketio
 
-      - name: Build bergwerk-db image
+      - name: Build db image
         run: |
-          docker build -t bergwerk-db ./bergwerk-db
+          docker build -t db ./bergwerk-db
 
-      - name: Build bergwerk-cron image
+      - name: Build cron image
         run: |
-          docker build -t bergwerk-cron ./bergwerk-cron
+          docker build -t cron ./bergwerk-cron

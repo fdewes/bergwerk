@@ -18,5 +18,5 @@ By managing external access and SSL provisioning, the Caddy service helps mainta
 ## Caddyfile
 
 ```
---8<-- "bergwerk-caddy/Caddyfile"
+--8<-- "caddy/Caddyfile"
 ```

@@ -14,7 +14,7 @@ while true; do
         --dbname wiki_db \
         --dbuser $SQL_USERNAME \
         --dbpass $SQL_PASSWORD \
-        --dbserver bergwerk-db \
+        --dbserver db \
         --pass $MEDIAWIKI_ADMIN_PASSWORD \
         chatbot_wiki admin
     

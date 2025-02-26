@@ -7,13 +7,13 @@ import os
 def sql2pd(database, table):
     user = os.getenv('SQL_USERNAME')
     password = os.getenv('SQL_PASSWORD')
-    connection_string = f"mysql+mysqlconnector://{user}:{password}@bergwerk-db/{database}"
+    connection_string = f"mysql+mysqlconnector://{user}:{password}@db/{database}"
     engine = create_engine(connection_string)
     df = pd.read_sql_table(table, con=engine)
     return df
 
 def login():
-    url = "http://bergwerk-wiki/w/api.php"
+    url = "http://wiki/w/api.php"
     session = requests.Session()
 
     response = session.get(url, params={
@@ -42,7 +42,7 @@ def login():
 
 
 def get_entire_page(page: str):
-    url = "http://bergwerk-wiki/w/api.php"
+    url = "http://wiki/w/api.php"
 
     page_params = {
         'action': 'parse',
@@ -63,7 +63,7 @@ def get_entire_page(page: str):
 
 def get_csrf_token(session):
 
-    url = "http://bergwerk-wiki/w/api.php"
+    url = "http://wiki/w/api.php"
     response = session.get(url, params={
         'action': 'query',
         'meta': 'tokens',
@@ -73,7 +73,7 @@ def get_csrf_token(session):
 
 def create_or_update_page(title, content):
     csrf_token = get_csrf_token(session)
-    url = "http://bergwerk-wiki/w/api.php"
+    url = "http://wiki/w/api.php"
     response = session.post(url, data={
         'action': 'edit',
         'title': title,

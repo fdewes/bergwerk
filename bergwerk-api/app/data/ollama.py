@@ -3,7 +3,7 @@ import json
 
 def query_llm(textinput):
 
-    url = "http://bergwerk-ollama:11434/api/generate"
+    url = "http://ollama:11434/api/generate"
     payload = {
         "model": "llama3.2:1b",
         "stream": False,
