@@ -1,8 +1,6 @@
 from data import ollama as data
 from data import wiki as wikidata 
-from service import wiki as wikiservice
-
-from model.menu import MenuResponse
+from service import wiki as service_wiki
 
 def query_llm(textinput):
 
@@ -16,7 +14,7 @@ def llm_training_data():
 
     for p in pages:
 
-        en_text = wikiservice.get_page(page=p, language="English").text
+        en_text = service_wiki.get_page(page=p, language="English").text
 
         instruction = """
         The following might be an answer to multiple questions. Please hypothesize five to ten questions which could trigger this answer and seperate them with a line break.      

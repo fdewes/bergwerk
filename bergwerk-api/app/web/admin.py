@@ -1,15 +1,12 @@
 import io
 from fastapi import APIRouter, HTTPException, Response, UploadFile
-from data import wiki as data
-from service import wiki as service
+from data import wiki as data_wiki
 from error import Unauthorized
 from datetime import datetime
 import json
 from icecream import ic
 
 router = APIRouter(prefix="/admin")
-
-HOST = "http://wiki/w"
 
 
 @router.get("")
@@ -21,10 +18,10 @@ def admin_endpoint() -> str:
 @router.get("/build_intent_classifier/{token}")
 @router.get("/build_intent_classifier/{token}/")
 def build_intent_classifier(token: str) -> None:
-    if not data.check_admin_token(HOST, token):
+    if not data_wiki.check_admin_token(token):
         raise HTTPException(status_code=403, detail="Incorrect token.")
     try:
-        data.build_intent_classifier(host=HOST, token=token)
+        data_wiki.build_intent_classifier(token=token)
     except Unauthorized as exc:
         raise HTTPException(status_code=403, detail=exc.msg)
 
@@ -32,11 +29,11 @@ def build_intent_classifier(token: str) -> None:
 @router.get("/export/{token}")
 @router.get("/export/{token}/")
 def export_json(token: str):
-    if not data.check_admin_token(HOST, token):
+    if not data_wiki.check_admin_token(token):
         raise HTTPException(status_code=403, detail="Incorrect token.")
 
-    all_pages = data.get_all_pages_of_category(HOST, "Content")
-    export = {title: data.get_entire_page(HOST, title) for title in all_pages}
+    all_pages = data_wiki.get_all_pages_of_category("Content")
+    export = {title: data_wiki.get_entire_page(title) for title in all_pages}
     json_data = json.dumps(export)
 
     date = datetime.now().strftime("%Y%m%d")
@@ -50,7 +47,7 @@ def export_json(token: str):
 @router.post("/import/{token}")
 @router.post("/import/{token}/")
 async def import_json(file: UploadFile, token: str):
-    if not data.check_admin_token(HOST, token):
+    if not data_wiki.check_admin_token(token):
         raise HTTPException(status_code=403, detail="Incorrect token.")
 
     file_content = await file.read()
@@ -65,4 +62,4 @@ async def import_json(file: UploadFile, token: str):
             print(f"Skipping {title}.")
             continue
         print(f"Creating page {title}.")
-        data.create_or_update_page(HOST, title, text)
+        data_wiki.create_or_update_page(title, text)
