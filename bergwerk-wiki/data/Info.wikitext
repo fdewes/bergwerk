@@ -14,7 +14,7 @@ Wenn Sie unsicher sind, ob Sie etwas nicht richtig verstanden haben, oder die An
 **The chatbot of the Service Center at virtual University of Sciences can answer questions for you regarding applications and studies**. Unfortunately, the chatbot cannot assist you in a personalized manner (yet), meaning questions about your specific timetable or your program of study will not be answered.
 
 
-If you are unsure whether you have understood something correctly or if the chatbot's information should be too vague, please contact the SSC directly using the [contact form](https://www.htw-berlin.de/en/organisational-units/central-administrative-departments/student-services/student-service-centre/?no_cache=1).
+If you are unsure whether you have understood something correctly or if the chatbot's information should be too vague, please contact the SSC directly using the contact form.
 </markdown>
 
 *

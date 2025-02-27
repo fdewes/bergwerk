@@ -10,14 +10,15 @@ config = config.Config()
 
 async def handle_disconnect(sid):
     if state.get_state(sid, "inactivity_timer") is not None:
-        state.get_state(sid, "inactivity_timer").cancel()
+        #state.get_state(sid, "inactivity_timer").cancel()
+        pass
         # del inactivity_timers[sid]
 
 
 async def handle_user_message(sid, data, sio, host):
     async with aiohttp.ClientSession() as session:
         if state.check_uid(sid):
-            await reset_inactivity_timer(sid, sio)
+            #await reset_inactivity_timer(sid, sio)
             await process_user_input(sid, data, sio, session, host)
         else:
             await handle_initial_interaction(sid, data, sio, session, host)
