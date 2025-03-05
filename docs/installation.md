@@ -4,9 +4,9 @@
 
 To fully understand the functionality of the **Bergwerk** application, it's essential to familiarize yourself with its core components:
 
-- **Bergwerk-wiki**: This is where the content for the chatbot is stored. It includes a structured menu and training questions for the intent classifier.
-- **Bergwerk-api**: This component allows access to the Wiki and provides import/export functionality for chatbot content, facilitating data migration.
-- **Bergwerk-socketio**: This adapter enables communication with the Rasa Webchat Plugin, which resides at the root of the web server.
+- **wiki**: This is where the content for the chatbot is stored. It includes a structured menu and training questions for the intent classifier.
+- **api**: This component allows access to the Wiki and provides import/export functionality for chatbot content, facilitating data migration.
+- **api**: This adapter enables communication with the Rasa Webchat Plugin, which resides at the root of the web server.
 - **Bergwerk-cron**: Responsible for automatically creating wiki pages from conversations stored in the MySQL Tracker database. These pages are saved on the wiki tracker.
 - **Database (db)**: A MySQL database that stores the MediaWiki conversation tracker, among other related data.
 - **Caddy**: Used as a reverse HTTP(S) proxy that serves both the Wiki and the API.
@@ -30,7 +30,7 @@ If you changed the server hostname from `localhost` to something else, ensure yo
 
 For secure communication with the MySQL component, Bergwerk automatically creates a self-signed TLS certificate. This allows secure remote access to the MySQL server. Currently, it is not possible to use a certificate from a trusted certificate authority.
 
-### `./bergwerk-wiki/configuration.txt`
+### `./wiki/configuration.txt`
 
 In this file, you can configure various settings, such as the initial greeting message for the Rasa Webchat Plugin, an error message, and the duration of the inactivity timer for conversation ratings. Most defaults should work in typical scenarios.
 
@@ -77,6 +77,6 @@ sense if you want your users to use the text input field instead of the menu but
 ### Backing up the Intent Classifier (and Reusing it)
 
 You can make a backup of the intent classifier by invoking `docker cp` for now. In your bergwerk directory, 
-`docker cp bergwerk-api:/intent_classifier bergwerk-api/data/` This will copy the intent classifier to the "data" directory of the Bergwerk API. 
+`docker cp api:/intent_classifier api/data/` This will copy the intent classifier to the "data" directory of the Bergwerk API. 
 Any intent classfier located in the "data" directory of the Bergwerk API will be automatically installed when you start your Bergwerk app via `docker compose up`.
 

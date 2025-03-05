@@ -7,5 +7,5 @@ The adapter acts as a bridge, enabling data flow and interaction between the web
 ## docker-compose.yaml
 
 ```Dockerfile
---8<-- "bergwerk-socketio/Dockerfile"
+--8<-- "api/Dockerfile"
 ```

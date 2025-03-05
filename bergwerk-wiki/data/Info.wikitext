@@ -1,0 +1,20 @@
+[[Category:Content]]
+= Deutsch =
+== Markdown ==
+<markdown>
+**Der Chatbot des Service-Centers der virtuellen Hochschule für Wissenschaft kann Ihnen Fragen zur Bewerbung und zum Studium beantworten**. Der Chatbot kann Ihnen leider (noch) nicht personalisiert weiterhelfen, d.h. Fragen zu Ihrem persönlichen Stundenplan oder Ihrem Studiengang werden leider nicht beantwortet.
+
+
+Wenn Sie unsicher sind, ob Sie etwas nicht richtig verstanden haben, oder die Angaben des Chatbots zu ungenau sein sollten, wenden Sie sich bitte direkt an das SSC mit dem Kontaktformular.
+</markdown>
+
+= English =
+== Markdown ==
+<markdown>
+**The chatbot of the Service Center at virtual University of Sciences can answer questions for you regarding applications and studies**. Unfortunately, the chatbot cannot assist you in a personalized manner (yet), meaning questions about your specific timetable or your program of study will not be answered.
+
+
+If you are unsure whether you have understood something correctly or if the chatbot's information should be too vague, please contact the SSC directly using the contact form.
+</markdown>
+
+*

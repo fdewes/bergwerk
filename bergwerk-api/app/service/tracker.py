@@ -1,7 +1,7 @@
 from datetime import datetime
-from data import db as data
+from data import db as data_db
 
 def track_text(uid, role, text, buttons):
     ts = datetime.now().timestamp()
-    data.track_text(uid, role, text, buttons, ts)
+    data_db.track_text(uid, role, text, buttons, ts)
     

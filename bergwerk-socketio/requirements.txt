@@ -37,3 +37,4 @@ websockets==12.0
 wheel==0.44.0
 wsproto==1.2.0
 yarl==1.9.4
+redis

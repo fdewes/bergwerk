@@ -1,0 +1,17 @@
+[[Category:Content]]
+
+= Deutsch =
+== Markdown ==
+
+<markdown>
+Vielen Dank für Ihr Feedback :)
+</markdown>
+
+= English =
+== Markdown ==
+
+<markdown>
+Thank you for your feedback :)
+</markdown>
+
+= Training Questions =

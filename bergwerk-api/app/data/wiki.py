@@ -19,15 +19,15 @@ from icecream import ic
 import yaml
 from .connections import WikiSession
 
+HOST = "http://wiki/w"
 wiki_session = WikiSession()
 
-def get_entire_page(host: str, page: str):
+def get_entire_page(page: str):
     """
     Retrieves the entire content of a specified page from the Bergwerk Wiki.
 
     Parameters:
     session (requests.Session): The session object used for making requests.
-    host (str): The base URL of the Bergwerk Wiki.
     page_title (str): The title of the page to retrieve.
 
     Returns:
@@ -36,7 +36,7 @@ def get_entire_page(host: str, page: str):
 
     session = wiki_session.get_session()
 
-    url = host + "/api.php"
+    url = HOST + "/api.php"
 
     page_params = {
         'action': 'parse',
@@ -56,27 +56,24 @@ def get_entire_page(host: str, page: str):
     return page_text
 
 
-def get_config_page(host: str) -> str:
+def get_config_page() -> str:
     """
     Retrieves the configuration page from the Bergwerk Wiki.
 
     Parameters:
     session (requests.Session): The session object used for making requests.
-    host (str): The base URL of the Bergwerk Wiki.
-    page_title (str): The title of the configuration page to retrieve.
 
     Returns:
     str: A string containing the configuration page content.
     """
-    return get_entire_page(host=host, page="Configuration")
+    return get_entire_page(page="Configuration")
 
 
-def get_section_wikitext(host: str, page: str, section: int) -> SectionWikitext:
+def get_section_wikitext(page: str, section: int) -> SectionWikitext:
     """
     Retrieves the wikitext of a specific section from a page on the Bergwerk Wiki.
 
     Parameters:
-    host (str): The base URL of the Bergwerk Wiki.
     page (str): The title of the page to retrieve the section from.
     section (int): The section number to retrieve the wikitext from.
 
@@ -86,7 +83,7 @@ def get_section_wikitext(host: str, page: str, section: int) -> SectionWikitext:
 
     session = wiki_session.get_session()
 
-    url = host + "/api.php"
+    url = HOST + "/api.php"
 
     params = {
         "action": "parse",
@@ -116,19 +113,17 @@ def get_section_wikitext(host: str, page: str, section: int) -> SectionWikitext:
                          replace("<markdown>", "").
                          replace("</markdown>", "").strip())
 
-    return SectionWikitext(host=host,
-                           page=page,
+    return SectionWikitext(page=page,
                            pageid=parsed_pageid,
                            section=section,
                            wikitext=filtered_wikitext)
 
 
-def get_sections(host: str, page: str) -> list[Section]:
+def get_sections(page: str) -> list[Section]:
     """
     Retrieves all sections from a specified page on the Bergwerk Wiki.
 
     Parameters:
-    host (str): The base URL of the Bergwerk Wiki.
     page (str): The title of the page to retrieve sections from.
 
     Returns:
@@ -137,7 +132,7 @@ def get_sections(host: str, page: str) -> list[Section]:
     
     session = wiki_session.get_session()
 
-    url = host + "/api.php"
+    url = HOST + "/api.php"
 
     params = {
         "action": "parse",
@@ -173,12 +168,9 @@ def get_sections(host: str, page: str) -> list[Section]:
     return sections
 
 
-def get_all_pages(host: str) -> list[str]:
+def get_all_pages() -> list[str]:
     """
     Retrieves a list of all page titles from the Bergwerk Wiki.
-
-    Parameters:
-    host (str): The base URL of the Bergwerk Wiki.
 
     Returns:
     list[str]: A list of all page titles.
@@ -186,7 +178,7 @@ def get_all_pages(host: str) -> list[str]:
 
     session = wiki_session.get_session()
 
-    URL = host + "/api.php"
+    URL = HOST + "/api.php"
 
     params = {
         "action": "query",
@@ -208,13 +200,12 @@ def get_all_pages(host: str) -> list[str]:
 
     return all_pages_titles
 
-def get_all_pages_of_category(host: str, category: str) -> list[str]:
+def get_all_pages_of_category(category: str) -> list[str]:
     """
     Retrieves a list of all page titles within a specified category from the Bergwerk Wiki.
 
     Parameters:
     session (requests.Session): The session object used for making requests.
-    host (str): The base URL of the Bergwerk Wiki.
     category (str): The name of the category to retrieve pages from.
 
     Returns:
@@ -223,7 +214,7 @@ def get_all_pages_of_category(host: str, category: str) -> list[str]:
 
     session = wiki_session.get_session()
 
-    URL = host + "/api.php"
+    URL = HOST + "/api.php"
 
     params = {
         "action": "query",
@@ -247,13 +238,12 @@ def get_all_pages_of_category(host: str, category: str) -> list[str]:
     return all_pages_titles
 
 
-def get_csrf_token(host, session):
+def get_csrf_token(session):
     """
     Retrieves a CSRF token from the Bergwerk Wiki.
 
     Parameters:
     session (requests.Session): The session object used for making requests.
-    host (str): The base URL of the Bergwerk Wiki.
 
     Returns:
     str: The CSRF token.
@@ -261,7 +251,7 @@ def get_csrf_token(host, session):
 
     session = wiki_session.get_session()
 
-    URL = host + "/api.php"
+    URL = HOST + "/api.php"
     response = session.get(URL, params={
         'action': 'query',
         'meta': 'tokens',
@@ -270,28 +260,27 @@ def get_csrf_token(host, session):
     return response.json()['query']['tokens']['csrftoken']
 
 
-def check_admin_token(host, token):
+def check_admin_token(token):
     """
     Checks if the provided token has admin privileges on the Bergwerk Wiki.
 
     Parameters:
-    host (str): The base URL of the Bergwerk Wiki.
     token (str): The token to check for admin privileges.
 
     Returns:
     bool: True if the token has admin privileges, False otherwise.
     """
-    if token == get_entire_page(host, "token"):
+    if token == get_entire_page("token"):
         return True
     else:
         return False
 
 
-def export_pages(host, token):
-    all_pages = get_all_pages(host)
+def export_pages(token):
+    all_pages = get_all_pages()
     export = {}
     for title in all_pages:
-        export[title] = get_entire_page(host, title)
+        export[title] = get_entire_page(title)
     with open(file_path, 'w') as file:
         json.dump(dictionary, file, indent=4)
 
@@ -311,15 +300,14 @@ def import_pages(pages):
     all_pages = yaml.safe_load(pages)
     for title, wikitext in all_pages:
         ic(title)
-        create_or_update_page(HOST, title, wikitext)
+        create_or_update_page(title, wikitext)
 
 
-def create_or_update_page(host, title, content):
+def create_or_update_page(title, content):
     """
     Creates or updates a page on the Bergwerk Wiki with the given wikitext content.
 
     Parameters:
-    host (str): The base URL of the Bergwerk Wiki.
     title (str): The title of the page to create or update.
     content (str): The wikitext content to be added to the page.
 
@@ -327,8 +315,8 @@ def create_or_update_page(host, title, content):
     None
     """
     session = wiki_session.get_session()
-    csrf_token = get_csrf_token(host, session)
-    URL = host + "/api.php"
+    csrf_token = get_csrf_token(session)
+    URL = HOST + "/api.php"
     response = session.post(URL, data={
         'action': 'edit',
         'title': title,
@@ -341,32 +329,32 @@ def create_or_update_page(host, title, content):
     return response.json()
 
 
-def build_intent_classifier(host: str, token: str):
+def build_intent_classifier(token: str):
     """
     Builds and trains an intent classifier using a specified dataset and model.
 
     Parameters:
-    host (str): The base URL of the Bergwerk Wiki.
+    HOST (str): The base URL of the Bergwerk Wiki.
     token (str): The token to check for admin privileges.
 
     Returns:
     None
     """
 
-    if not check_admin_token(host, token):
+    if not check_admin_token(token):
         raise Unauthorized("Please provide correct token.")
 
-    page_titles = get_all_pages(host)
+    page_titles = get_all_pages()
     ic(page_titles)
 
     training = {}
 
     for t in page_titles:
-        sections = get_sections(host, t)
+        sections = get_sections(t)
         for section in sections:
             if section.line == "Training Questions":
                 training[t] = get_section_wikitext(
-                    host, t, section.index).wikitext
+                    t, section.index).wikitext
 
     counter = 0
     i = 0
@@ -431,5 +419,5 @@ def build_intent_classifier(host: str, token: str):
 if __name__ == "__main__":
     from icecream import ic
     # export PYTHONPATH="${PYTHONPATH}:`pwd`"
-    # build_intent_classifier("http://localhost:8080")
+    # build_intent_classifier("http://localHOST:8080")
     ic(predict("what english proficiency?"))

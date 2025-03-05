@@ -27,7 +27,7 @@ class WikiSession:
 
     def login(self):
 
-        url = "http://bergwerk-wiki/w/api.php"
+        url = "http://wiki/w/api.php"
         session = requests.Session()
 
         # Get login token
@@ -82,7 +82,7 @@ class DatabaseSession:
             conn = mariadb.connect(
                 user=os.getenv('SQL_USERNAME'),
                 password=os.getenv('SQL_PASSWORD'),
-                host="bergwerk-db",
+                host="db",
                 port=3306,
                 database="tracker_db"
             )

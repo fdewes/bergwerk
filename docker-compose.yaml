@@ -1,50 +1,50 @@
 services:
-  bergwerk-wiki:
+  wiki:
     env_file:
       - config.env
     build:
       context: ./bergwerk-wiki
-    container_name: bergwerk-wiki
+    container_name: wiki
     networks:
       - netzwerk
     depends_on:
-      bergwerk-db:
+      db:
         condition: service_healthy
 
-  bergwerk-api:
+  api:
     env_file:
       - config.env
     build:
       context: ./bergwerk-api
-    container_name: bergwerk-api
+    container_name: api
     volumes:
       - ./bergwerk-api/app:/app  
     networks:
       - netzwerk
     depends_on:
-      bergwerk-wiki:
+      wiki:
         condition: service_started
 
-  bergwerk-socketio:
+  socketio:
     build:
       context: ./bergwerk-socketio
-    container_name: bergwerk-socketio
+    container_name: socketio
     volumes:
       - ./bergwerk-socketio/app:/app
     networks:
       - netzwerk
     depends_on:
-      bergwerk-wiki:
+      wiki:
         condition: service_started
-      bergwerk-api:
+      api:
         condition: service_started
 
 
-  bergwerk-caddy:
+  caddy:
     image: caddy:latest
     env_file:
       - config.env
-    container_name: bergwerk-caddy
+    container_name: caddy
     ports:
       - "80:80"
       - "443:443"
@@ -56,20 +56,20 @@ services:
     networks:
       - netzwerk
     depends_on:
-      bergwerk-wiki:
+      wiki:
         condition: service_started
-      bergwerk-api:
+      api:
         condition: service_started
-      bergwerk-socketio:
+      socketio:
         condition: service_started
 
 
-  bergwerk-db:
+  db:
     env_file:
       - config.env
     build:
       context: ./bergwerk-db
-    container_name: bergwerk-db
+    container_name: db
     ports:
       - "3306:3306"
     volumes:
@@ -81,21 +81,49 @@ services:
         timeout: 20s
         retries: 10
 
-  bergwerk-cron:
+  cron:
     env_file:
       - config.env
     build:
       context: ./bergwerk-cron
-    container_name: bergwerk-cron
+    container_name: cron
     volumes:
       - ./bergwerk-cron/app:/usr/src/app
     networks:
       - netzwerk
     depends_on:
-      bergwerk-wiki:
+      wiki:
         condition: service_started
-      bergwerk-db:
+      db:
         condition: service_healthy
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - 11434:11434
+    volumes:
+      - ./persist/ollama_code:/code
+      - ./persist/ollama:/root/.ollama
+      - ./bergwerk-ollama/entrypoint.sh:/entrypoint.sh
+    container_name: ollama
+    pull_policy: always
+    tty: true
+    restart: always
+    environment:
+      - OLLAMA_KEEP_ALIVE=24h
+      - OLLAMA_HOST=0.0.0.0
+    networks:
+      - netzwerk
+    entrypoint: ["/usr/bin/bash", "/entrypoint.sh"]
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - netzwerk
 
 
 networks:

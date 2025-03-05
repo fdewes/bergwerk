@@ -1,0 +1,20 @@
+[[Category:Content]]
+= Deutsch =
+== Markdown ==
+<markdown>
+Sie interessieren sich für ein Studium an der Hochschule für Wissenschaft? Bitte wählen Sie ein Themengebiet oder stellen Sie Ihre Anfrage im Textfeld. 
+
+
+Bitte wählen Sie ein Thema:</markdown>
+
+
+= English =
+== Markdown ==
+<markdown>
+Are you interested in studying at the virtual University of Sciences? Please choose a subject area or submit your request in the text field.
+
+
+Please select a topic:</markdown>
+
+
+= Training Questions =

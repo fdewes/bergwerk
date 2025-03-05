@@ -2,15 +2,12 @@ from model.pageconfidence import PageConfidence
 from model.section import Section
 from model.menu import MenuItem, MenuResponse
 from model.configuration import ConfigItem
-import data.wiki as data
+from data import wiki as data_wiki
 from error import MissingLanguage, MissingClassifier
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 import pandas as pd
 from datetime import datetime
 import re
-
-HOST = "http://bergwerk-wiki/w"
-
 
 def parse_configuration(content):
     """
@@ -32,21 +29,21 @@ def parse_configuration(content):
     return config
 
 
-def get_configitem(configitem: str, host=HOST) -> ConfigItem:
-    config_page = data.get_config_page(host=HOST)
+def get_configitem(configitem: str) -> ConfigItem:
+    config_page = data_wiki.get_config_page()
     config = parse_configuration(config_page)
     return ConfigItem(key=configitem, value=config[configitem])
 
 
-def get_config(host=HOST) -> list[ConfigItem]:
-    config_page = data.get_config_page(host=host)
+def get_config() -> list[ConfigItem]:
+    config_page = data_wiki.get_config_page()
     config = parse_configuration(config_page)
     l = [ConfigItem(key=key, value=value) for (key, value) in config.items()]
     return l
 
 
 def get_language_specific_sections(page: str, language: str) -> list[Section]:
-    sections = data.get_sections(host=HOST, page=page)
+    sections = data_wiki.get_sections(page=page)
 
     language_sections: list[Section] = []
 
@@ -69,11 +66,11 @@ def get_page(page: str, language: str) -> MenuResponse:
 
     for s in sections:
         if s.line == "Buttons":
-            menuitems = data.get_section_wikitext(
-                host=HOST, page=page, section=int(s.index)).wikitext
+            menuitems = data_wiki.get_section_wikitext(
+                page=page, section=int(s.index)).wikitext
         if s.line == "Markdown":
-            text = data.get_section_wikitext(
-                host=HOST, page=page, section=int(s.index)).wikitext
+            text = data_wiki.get_section_wikitext(
+                page=page, section=int(s.index)).wikitext
 
     menuitemlist: list[MenuItem] = []
 
@@ -121,7 +118,7 @@ def predict(textinput: str) -> list[PageConfidence]:
 
 def track_text(uid, role, text):
     tracker_page = datetime.now().strftime("%Y%m%d") + "_" + uid
-    wikitext_history = data.get_entire_page(host=HOST, page=tracker_page)
+    wikitext_history = data_wiki.get_entire_page(page=tracker_page)
     if wikitext_history is None:
         wikitext = "[[Category:Tracker]]\n'''" + role + ":'''" + text + "<br>"
     else:
@@ -129,7 +126,7 @@ def track_text(uid, role, text):
             "</strong> <small>(" + datetime.now().strftime("%H:%M") + \
             ")</Small>:<markdown>" + text + "</markdown><br>"
 
-    data.create_or_update_page(host=HOST, title=tracker_page, content=wikitext)
+    data_wiki.create_or_update_page(title=tracker_page, content=wikitext)
 
 
 
