@@ -27,7 +27,8 @@ while true; do
     fi
 done
 
-sudo -u www-data php maintenance/createAndPromote.php $BOT_USERNAME $BOT_PASSWORD --bot
+sudo -u www-data php maintenance/run.php createAndPromote $BOT_USERNAME $BOT_PASSWORD --bot
+
 
 echo "wfLoadExtension( 'VisualEditor' );" >> $WIKI_DIR/LocalSettings.php
 echo "wfLoadExtension( 'WikiMarkdown' );" >> $WIKI_DIR/LocalSettings.php
