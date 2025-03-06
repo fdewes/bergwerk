@@ -53,7 +53,8 @@ def create_or_update_page(session, csrf_token, title, content):
         'title': title,
         'text': content,
         'token': csrf_token,
-        'format': 'json'
+        'format': 'json',
+        'bot': 'True'
     })
     if 'error' in response.json():
         raise Exception(response.json()['error'])
