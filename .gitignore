@@ -185,3 +185,4 @@ helpers/export20241111.pkl
 persist/*
 example_data.json
 config.env
+bergwerk-db/data/tracker_db.sql
