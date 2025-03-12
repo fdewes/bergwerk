@@ -13,11 +13,11 @@ This page is updated every day with the latest statistics for this assistant.
 
 == All Time Users == 
 
-[[File:upd_all_time.png|thumb]]
+[[File:upd_all_time.png|1000px|Number of Unique Users per Day]]
 
 == Users per Week ==
 
-[[File:upw_all_time.png|thumb]]
+[[File:upw_all_time.png|1000px|Number of Unique Users per Week]]
 
 """
 
