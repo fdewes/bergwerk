@@ -10,6 +10,7 @@ def sql2pd(database, table):
     connection_string = f"mysql+mysqlconnector://{user}:{password}@db/{database}"
     engine = create_engine(connection_string)
     df = pd.read_sql_table(table, con=engine)
+    engine.close()
     return df
 
 def login():
