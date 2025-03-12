@@ -186,3 +186,4 @@ persist/*
 example_data.json
 config.env
 bergwerk-db/data/tracker_db.sql
+bergwerk-cron/app/*.png
