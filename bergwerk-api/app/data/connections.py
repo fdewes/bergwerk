@@ -101,7 +101,8 @@ class DatabaseSession:
             ts BIGINT,                     
             role VARCHAR(50),                          
             text TEXT,                                 
-            buttons TEXT
+            buttons TEXT,
+            language VARCHAR(20)
         );
         """
 

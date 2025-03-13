@@ -45,10 +45,10 @@ def get_configitem(configitem: str) -> ConfigItem:
 @router.post("/menuinput")
 @router.post("/menuinput/")
 def get_menuinput(data: MenuInput) -> MenuResponse:
-    service_tracker.track_text(uid=data.uid, role="User", text="", buttons=data.menuinput)
+    service_tracker.track_text(uid=data.uid, role="User", text="", buttons=data.menuinput, language=data.language)
     try:
         mr = service_wiki.get_page(page=data.menuinput, language=data.language)
-        service_tracker.track_text(uid=data.uid, role="Assistant", text=mr.text, buttons=str(mr.menuitems))
+        service_tracker.track_text(uid=data.uid, role="Assistant", text=mr.text, buttons=str(mr.menuitems), language=data.language)
         return mr
     except MissingPage as exc:
         raise HTTPException(status_code=404, detail=exc.msg)
@@ -69,7 +69,7 @@ def get_textinput(data: TextInput) -> MenuResponse:
             return MenuResponse(title="No intent classifier.", text="No intent classifier.", menuitems=[])
         page = pc[0]
         mr = service_wiki.get_page(page=page.title, language=data.language)
-        service_tracker.track_text(uid=data.uid, role="Assistant", text=mr.text, buttons=str(mr.menuitems))
+        service_tracker.track_text(uid=data.uid, role="Assistant", text=mr.text, buttons=str(mr.menuitems),language=data.language)
         return mr
     except MissingPage as exc:
         raise HTTPException(status_code=404, detail=exc.msg)
