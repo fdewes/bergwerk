@@ -104,7 +104,6 @@ services:
     volumes:
       - ./persist/ollama_code:/code
       - ./persist/ollama:/root/.ollama
-      - ./bergwerk-ollama/entrypoint.sh:/entrypoint.sh
     container_name: ollama
     pull_policy: always
     tty: true
@@ -114,7 +113,6 @@ services:
       - OLLAMA_HOST=0.0.0.0
     networks:
       - netzwerk
-    entrypoint: ["/usr/bin/bash", "/entrypoint.sh"]
 
   redis:
     image: redis:latest

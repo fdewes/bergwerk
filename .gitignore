@@ -187,3 +187,5 @@ example_data.json
 config.env
 bergwerk-db/data/tracker_db.sql
 bergwerk-cron/app/*.png
+bergwerk-wiki/data/Token.wikitext
+export.json

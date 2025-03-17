@@ -1,5 +1,5 @@
-from data import ollama as data
-from data import wiki as wikidata 
+from data import ollama as data_ollama
+from data import wiki as data_wiki 
 from service import wiki as service_wiki
 
 def query_llm(textinput):
@@ -10,25 +10,36 @@ def query_llm(textinput):
 
 
 def llm_training_data():
-    pages = wikidata.get_all_pages_of_category("http://wiki/w", "Content")
 
-    for p in pages:
+    pages = data_wiki.get_all_pages_of_category("Content")
+    model_list = [m.strip() for m in service_wiki.get_configitem("llm_models_training_list").value.split(",")]
+    instruction = service_wiki.get_configitem("llm_models_training_instruction").value
 
-        en_text = service_wiki.get_page(page=p, language="English").text
+    for model in model_list:
 
-        instruction = """
-        The following might be an answer to multiple questions. Please hypothesize five to ten questions which could trigger this answer and seperate them with a line break.      
-        """
+        data_ollama.load_model(model)
+        print(f"Try to load model {model}")
 
-        prompt = instruction + "\n" + en_text 
+        for p in pages:
+            try:
 
-        r = data.query_llm(prompt)
+                print(f"Generating training content with {model} for page {p}")
 
-        print()
-        full_page = wikidata.get_entire_page("http://wiki/w", p)
-        full_page += "\n= Training Questions =\n" + r['response']
+                en_text = service_wiki.get_page(page=p, language="English").text
 
-        wikidata.create_or_update_page("http://wiki/w", p, full_page)
+                prompt = instruction + "\n" + en_text 
+
+                r = data_ollama.query_llm(prompt, model)
+                full_page = data_wiki.get_entire_page(p)
+                full_page += f"\n= Training Questions from {model}=\n" + "\n==== Prompt ====\n" + "<pre>\n" + prompt + "</pre>""\n==== Raw Model Output ====\n" + "<pre>\n" + r + "</pre>"
+
+                data_wiki.create_or_update_page(p, full_page)
+                
+            except Exception as e:
+                print(e)
+                continue
+            
+
 
 
 
