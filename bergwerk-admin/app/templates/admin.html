@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mt-5">Admin Panel</h2>
+
+    <h3>Configuration</h3>
+    <ul>
+        {% for key, value in config_data.items() %}
+        <li><strong>{{ key }}:</strong> {{ value }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Actions</h3>
+    <form method="POST">
+        <button name="train" class="btn btn-success">Train Intent Classifier</button>
+        <button name="export" class="btn btn-info">Download Export</button>
+    </form>
+
+    <h3>Upload Backup</h3>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="form-group mt-3">
+            {{ form.file.label }} 
+            {{ form.file(class="form-control") }}
+        </div>
+        <button type="submit" class="btn btn-warning mt-3">Upload</button>
+    </form>
+</div>
+{% endblock %}
