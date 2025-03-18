@@ -16,4 +16,4 @@ inactivity_timer=60
 === LLM Models for Training Data Generation ===
 llm_models_training_list=gemma3:1b, gemma3, deepseek-r1:1.5b, deepseek-r1:7b, llama3.2:1b, llama3.2:3b
 
-llm_models_training_instruction=Read the text below, which could serve as an answer to various questions. Please generate five to ten plausible questions that might prompt this answer. Please include some informal questions. Write each question on its own line and start each line with a asterisk ("*"), without adding any extra numbering, formatting or commentary:
+llm_models_training_instruction=Read the text below, which could serve as an answer to various questions. Please generate five to ten plausible questions that might prompt this answer. Please include some informal questions. Write each question on its own line and start each line with a asterisk followed by a whitespace ("* "), without adding any extra numbering, formatting or commentary:
