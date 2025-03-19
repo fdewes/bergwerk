@@ -61,7 +61,7 @@ def get_menuinput(data: MenuInput) -> MenuResponse:
 @router.post("/textinput/")
 @router.post("/textinput")
 def get_textinput(data: TextInput) -> MenuResponse:
-    service_tracker.track_text(uid=data.uid, role="User", text=data.textinput, buttons="")
+    service_tracker.track_text(uid=data.uid, role="User", text=data.textinput, buttons="", language=data.language)
     try:
         try:
             pc = service_wiki.predict(data.textinput)
