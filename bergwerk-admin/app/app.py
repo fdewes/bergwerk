@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, url_for, request, flash, sen
 import os
 import requests
 import redis
-from forms import LoginForm, UploadForm
+from forms import LoginForm, UploadForm, ConfigForm
 from config import Config
 
 app = Flask(__name__)
@@ -28,8 +28,8 @@ for key, value in default_settings.items():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        username = "admin" #os.getenv('MEDIAWIKI_ADMIN')
-        password = "wikipassword" #os.getenv('MEDIAWIKI_ADMIN_PASSWORD')
+        username = os.getenv('MEDIAWIKI_ADMIN')
+        password = os.getenv('MEDIAWIKI_ADMIN_PASSWORD')
 
         if form.username.data == username and form.password.data == password:
             return redirect(url_for('admin_panel'))
@@ -41,7 +41,11 @@ def login():
 @app.route("/admin", methods=["GET", "POST"])
 def admin_panel():
     form = UploadForm()
-    
+    config_form = ConfigForm()
+
+    # Load config from Redis
+    config_data = {key: redis_client.get(key) for key in config_form.fields.keys()}
+
     if request.method == "POST":
         if "train" in request.form:
             response = requests.get("http://api/admin/build_intent_classifier/")
@@ -53,15 +57,20 @@ def admin_panel():
                 f.write(response.content)
             return send_file("export.json", as_attachment=True)
 
+        elif "update_config" in request.form:
+            for field in config_form.fields.keys():
+                value = request.form.get(field)
+                redis_client.set(field, value)
+            flash("Configuration updated successfully!", "success")
+            return redirect(url_for('admin_panel'))
+
         elif form.validate_on_submit():
             file = form.file.data
             files = {'file': (file.filename, file.stream, 'multipart/form-data')}
             response = requests.post("http://api/admin/import/", files=files)
             flash(f"Import Response: {response.text}", "success")
 
-    config_data = {key: redis_client.get(key) for key in default_settings.keys()}
-
-    return render_template("admin.html", form=form, config_data=config_data)
+    return render_template("admin.html", form=form, config_form=config_form, config_data=config_data)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=80, debug=True)

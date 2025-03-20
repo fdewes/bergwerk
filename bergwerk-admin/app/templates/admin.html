@@ -7,17 +7,46 @@
     <h2 class="mt-5">Admin Panel</h2>
 
     <h3>Configuration</h3>
-    <ul>
-        {% for key, value in config_data.items() %}
-        <li><strong>{{ key }}:</strong> {{ value }}</li>
-        {% endfor %}
-    </ul>
+    <form method="POST">
+        {{ config_form.hidden_tag() }}
+        
+        <div class="form-group mt-3">
+            {{ config_form.error_message.label }} 
+            {{ config_form.error_message(class="form-control", value=config_data.error_message) }}
+        </div>
+        
+        <div class="form-group mt-3">
+            {{ config_form.initial_greeting.label }} 
+            {{ config_form.initial_greeting(class="form-control", value=config_data.initial_greeting) }}
+        </div>
+        
+        <div class="form-group mt-3">
+            {{ config_form.inactivity_timer.label }} 
+            {{ config_form.inactivity_timer(class="form-control", value=config_data.inactivity_timer) }}
+        </div>
+        
+        <div class="form-group mt-3">
+            {{ config_form.llm_models_training_list.label }} 
+            {{ config_form.llm_models_training_list(class="form-control", value=config_data.llm_models_training_list) }}
+        </div>
+        
+        <div class="form-group mt-3">
+            {{ config_form.llm_models_training_instruction.label }} 
+            {{ config_form.llm_models_training_instruction(class="form-control", value=config_data.llm_models_training_instruction) }}
+        </div>
+        
+        <button type="submit" name="update_config" class="btn btn-primary mt-3">Update Configuration</button>
+    </form>
+
+    <hr>
 
     <h3>Actions</h3>
     <form method="POST">
         <button name="train" class="btn btn-success">Train Intent Classifier</button>
         <button name="export" class="btn btn-info">Download Export</button>
     </form>
+
+    <hr>
 
     <h3>Upload Backup</h3>
     <form method="POST" enctype="multipart/form-data">

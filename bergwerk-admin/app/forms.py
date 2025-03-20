@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, FileField
+from wtforms import StringField, PasswordField, SubmitField, FileField, TextAreaField
 from wtforms.validators import DataRequired
 
 class LoginForm(FlaskForm):
@@ -10,3 +10,21 @@ class LoginForm(FlaskForm):
 class UploadForm(FlaskForm):
     file = FileField('Upload JSON File', validators=[DataRequired()])
     submit = SubmitField('Upload')
+
+class ConfigForm(FlaskForm):
+    error_message = StringField('Error Message', validators=[DataRequired()])
+    initial_greeting = TextAreaField('Initial Greeting', validators=[DataRequired()])
+    inactivity_timer = StringField('Inactivity Timer', validators=[DataRequired()])
+    llm_models_training_list = TextAreaField('LLM Models Training List', validators=[DataRequired()])
+    llm_models_training_instruction = TextAreaField('LLM Training Instruction', validators=[DataRequired()])
+    
+    update_config = SubmitField('Update Configuration')
+
+    # Mapping of fields for easy retrieval in app.py
+    fields = {
+        "error_message": error_message,
+        "initial_greeting": initial_greeting,
+        "inactivity_timer": inactivity_timer,
+        "llm_models_training_list": llm_models_training_list,
+        "llm_models_training_instruction": llm_models_training_instruction
+    }

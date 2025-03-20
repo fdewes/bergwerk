@@ -1,10 +1,6 @@
 {$SERVER} {
-
-
     root * /var/www/html
     file_server
-
-
 
     handle_path /wiki* {
         reverse_proxy wiki:80
