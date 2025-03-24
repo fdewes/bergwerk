@@ -15,8 +15,8 @@ class ConfigForm(FlaskForm):
     error_message = StringField('Error Message', validators=[DataRequired()])
     initial_greeting = TextAreaField('Initial Greeting', validators=[DataRequired()])
     inactivity_timer = StringField('Inactivity Timer', validators=[DataRequired()])
-    llm_models_training_list = TextAreaField('LLM Models Training List', validators=[DataRequired()])
-    llm_models_training_instruction = TextAreaField('LLM Training Instruction', validators=[DataRequired()])
+    English_llm_models_training_list = TextAreaField('LLM Models Training List', validators=[DataRequired()])
+    English_llm_models_training_instruction = TextAreaField('LLM Training Instruction', validators=[DataRequired()])
     
     update_config = SubmitField('Update Configuration')
 
@@ -25,6 +25,6 @@ class ConfigForm(FlaskForm):
         "error_message": error_message,
         "initial_greeting": initial_greeting,
         "inactivity_timer": inactivity_timer,
-        "llm_models_training_list": llm_models_training_list,
-        "llm_models_training_instruction": llm_models_training_instruction
+        "English_llm_models_training_list": English_llm_models_training_list,
+        "English_llm_models_training_instruction": English_llm_models_training_instruction
     }

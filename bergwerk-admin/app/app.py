@@ -16,8 +16,10 @@ default_settings = {
     "error_message": "Oops! Something went wrong. Ups! Hier funktionert etwas nicht!",
     "initial_greeting": "Um den Chatbot nutzen zu können, müssen Sie bitte unserer Datenschutzerklärung zustimmen. \n\n To proceed, please agree to our chatbot's privacy policy.",
     "inactivity_timer": "60",
-    "llm_models_training_list": "gemma3, gemma3:1b, deepseek-r1:1.5b, deepseek-r1:7b, llama3.2:1b, llama3.2:3b",
-    "llm_models_training_instruction": "Read the text below, which could serve as an answer to various questions..."
+    "English_llm_models_training_list": "gemma3, gemma3:1b, deepseek-r1:1.5b, deepseek-r1:7b, llama3.2:1b, llama3.2:3b",
+    "Deutsch_llm_models_training_list": "gemma3, gemma3:1b, deepseek-r1:1.5b, deepseek-r1:7b, llama3.2:1b, llama3.2:3b",
+    "English_llm_models_training_instruction": "Read the text below, which could serve as an answer to various questions...",
+    "Deutsch_llm_models_training_instruction": "Lies den folgenden Text, der als Antwort auf verschiedene Fragen dienen könnte. Bitte formuliere fünf bis zehn plausible Fragen..."
 }
 
 for key, value in default_settings.items():
@@ -51,11 +53,16 @@ def admin_panel():
             response = requests.get("http://api/admin/build_intent_classifier/")
             flash(f"Intent Classifier Training Response: {response.text}", "info")
 
+        elif "generate" in request.form:
+            response = requests.get("http://api/llm/llm_training_data/")
+            flash(f"Intent Classifier Training Response: {response.text}", "info")
+
         elif "export" in request.form:
             response = requests.get("http://api/admin/export/")
             with open("export.json", "wb") as f:
                 f.write(response.content)
             return send_file("export.json", as_attachment=True)
+        
 
         elif "update_config" in request.form:
             for field in config_form.fields.keys():

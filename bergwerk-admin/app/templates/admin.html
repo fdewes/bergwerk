@@ -26,13 +26,13 @@
         </div>
         
         <div class="form-group mt-3">
-            {{ config_form.llm_models_training_list.label }} 
-            {{ config_form.llm_models_training_list(class="form-control", value=config_data.llm_models_training_list) }}
+            {{ config_form.English_llm_models_training_list.label }} 
+            {{ config_form.English_llm_models_training_list(class="form-control", value=config_data.English_llm_models_training_list) }}
         </div>
         
         <div class="form-group mt-3">
-            {{ config_form.llm_models_training_instruction.label }} 
-            {{ config_form.llm_models_training_instruction(class="form-control", value=config_data.llm_models_training_instruction) }}
+            {{ config_form.English_llm_models_training_instruction.label }} 
+            {{ config_form.English_llm_models_training_instruction(class="form-control", value=config_data.English_llm_models_training_instruction) }}
         </div>
         
         <button type="submit" name="update_config" class="btn btn-primary mt-3">Update Configuration</button>
@@ -43,6 +43,7 @@
     <h3>Actions</h3>
     <form method="POST">
         <button name="train" class="btn btn-success">Train Intent Classifier</button>
+        <button name="generate" class="btn btn-success">Generate Training Questions</button>
         <button name="export" class="btn btn-info">Download Export</button>
     </form>
 
