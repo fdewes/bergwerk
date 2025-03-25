@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel</title>
+  <style>
+    body { font-family: Arial; margin: 2rem; background: #f8f9fa; }
+    h1 { color: #333; }
+    form, .block { background: white; padding: 1rem; border-radius: 10px; margin-bottom: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    button { padding: 0.5rem 1rem; margin-top: 1rem; }
+    input[type="text"] { width: 100%; padding: 0.5rem; margin-top: 0.2rem; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>Admin Panel</h1>
+
+  <div class="block">
+    <h2>Trigger Actions</h2>
+    <a href="trigger/build"><button>Build Intent Classifier</button></a>
+    <a href="trigger/export"><button>Download Export</button></a>
+  </div>
+
+  <div class="block">
+    <h2>Upload Backup</h2>
+    <form action="upload" enctype="multipart/form-data" method="post">
+      <input type="file" name="file" required>
+      <button type="submit">Upload</button>
+    </form>
+  </div>
+
+  <div class="block">
+    <h2>Configuration</h2>
+    <form action="config/update" method="post">
+      {% for k, v in config.items() %}
+        <label>{{ k }}</label>
+        <input type="text" name="{{ k }}" value="{{ v }}">
+      {% endfor %}
+      <button type="submit">Save</button>
+    </form>
+  </div>
+</body>
+</html>

@@ -65,16 +65,12 @@ services:
 
   admin:
     build: ./bergwerk-admin
-    container_name: admin
-    networks:
-      - netzwerk 
-    volumes:
-      - ./bergwerk-admin/app:/app
-    environment:
-      - FLASK_ENV=development
     depends_on:
       - redis
-    restart: always
+    volumes:
+      - ./bergwerk-admin/app:/app
+    networks:
+      - netzwerk
 
   db:
     env_file:

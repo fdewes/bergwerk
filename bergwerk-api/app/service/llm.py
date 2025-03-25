@@ -13,7 +13,7 @@ def llm_training_data():
 
     pages = data_wiki.get_all_pages_of_category("Content")
 
-    model_list = [m.strip() for m in service_wiki.get_configitem("English_llm_models_training_list").value.split(",")]
+    model_list = [m.strip() for m in service_wiki.get_configitem("English_lneolm_models_training_list").value.split(",")]
     instruction = service_wiki.get_configitem("English_llm_models_training_instruction").value
 
     for model in model_list:
