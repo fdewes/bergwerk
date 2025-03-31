@@ -66,6 +66,11 @@ async def trigger_export():
         f.write(response.content)
     return FileResponse("export.json", filename="export.json", media_type='application/json')
 
+@app.get("/trigger/generate")
+async def trigger_generate():
+    response = requests.get("http://api/llm/llm_training_data/")
+    return JSONResponse({"message": response.text})
+
 @app.post("/config/update")
 async def config_update(request: Request):
     check_auth(request)

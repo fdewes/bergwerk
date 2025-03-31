@@ -131,6 +131,15 @@ services:
     networks:
       - netzwerk
 
+  init:
+    build: ./bergwerk-init
+    depends_on:
+      - redis
+    command: ["python", "load_config.py"]
+    volumes:
+      - ./config.yaml:/app/config.yaml
+    networks:
+      - netzwerk
 
 networks:
   netzwerk:

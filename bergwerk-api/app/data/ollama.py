@@ -3,7 +3,7 @@ import json
 
 
 def load_model(model):
-    url = "http://ollama:11434/api/pull"
+    url = "https://f2ki-h100-1.f2.htw-berlin.de:11435/api/pull"
     payload = {
         "model": model,
     }
@@ -12,7 +12,7 @@ def load_model(model):
     return response
 
 def delete_model(model):
-    url = "http://ollama:11434/api/delete"
+    url = "https://f2ki-h100-1.f2.htw-berlin.de:11435/api/delete"
     payload = {
         "model": model,
     }
@@ -22,7 +22,7 @@ def delete_model(model):
 
 def query_llm(textinput, model):
 
-    url = "http://ollama:11434/api/generate"
+    url = "https://f2ki-h100-1.f2.htw-berlin.de:11435/api/generate"
     payload = {
         "model": model,
         "stream": False,
