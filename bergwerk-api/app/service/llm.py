@@ -1,10 +1,11 @@
 from data import ollama as data_ollama
 from data import wiki as data_wiki 
 from service import wiki as service_wiki
+from . import config as service_config
 
 def query_llm(textinput):
 
-    response = data.query_llm(textinput)
+    response = data_ollama.query_llm(textinput)
 
     return response
 
@@ -14,7 +15,7 @@ def llm_training_data():
     pages = data_wiki.get_all_pages_of_category("Content")
 
     model_list = [m.strip() for m in service_wiki.get_configitem("Deutsch_llm_models_training_list").value.split(",")]
-    instruction = service_wiki.get_configitem("Deutsch_llm_models_training_instruction").value
+    instruction = service_config.get_configitem("Deutsch_llm_models_training_instruction").value
 
     for model in model_list:
 
@@ -43,7 +44,7 @@ def llm_training_data():
                 continue
 
     model_list = [m.strip() for m in service_wiki.get_configitem("English_llm_models_training_list").value.split(",")]
-    instruction = service_wiki.get_configitem("English_llm_models_training_instruction").value
+    instruction = service_config.get_configitem("English_llm_models_training_instruction").value
 
     for model in model_list:
 

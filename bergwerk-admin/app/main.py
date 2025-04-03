@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request, Form, UploadFile, File
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from redis_config import init_defaults, get_all_config, update_config
+from redis_config import get_all_config, update_config
 from auth import check_auth
 import os
 import requests
@@ -27,16 +27,24 @@ app.add_middleware(RootPathMiddleware)
 
 templates = Jinja2Templates(directory="templates")
 
-init_defaults()
+#init_defaults()
+
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    try:
-        check_auth(request)
-        config = get_all_config()
-        return templates.TemplateResponse("index.html", {"request": request, "config": config})
-    except:
-        return templates.TemplateResponse("login.html", {"request": request})
+    check_auth(request)
+    config = get_all_config()
+    return templates.TemplateResponse("index.html", {"request": request, "config": config})
+
+
+# @app.get("/", response_class=HTMLResponse)
+# async def index(request: Request):
+#     try:
+#         check_auth(request)
+#         config = get_all_config()
+#         return templates.TemplateResponse("index.html", {"request": request, "config": config})
+#     except:
+#         return templates.TemplateResponse("login.html", {"request": request})
 
 @app.post("/login")
 async def login(request: Request, user: str = Form(...), password: str = Form(...)):

@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from  service import wiki as service_wiki
+from  service import config as service_config
 from  service import tracker as service_tracker 
 from model.menu import MenuResponse
 from model.textinput import TextInput
@@ -33,7 +34,7 @@ def get_config() -> list[ConfigItem]:
 @router.get("/config/{configitem}/")
 def get_configitem(configitem: str) -> ConfigItem:
     try:
-        return service_wiki.get_configitem(configitem=configitem)
+        return service_config.get_configitem(configitem=configitem)
     except MissingPage as exc:
         raise HTTPException(status_code=404, detail=exc.msg)
     except MissingSection as exc:

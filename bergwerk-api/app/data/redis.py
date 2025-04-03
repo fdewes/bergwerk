@@ -1,9 +1,10 @@
 import redis
 import json
+from model.configuration import ConfigItem
 
-r = redis.Redis(host='redis', port=6379, decode_responses=True, db=0)
+r = redis.Redis(host="redis", port=6379, db=0, decode_responses=True)
 
-def get_all_config():
+def get_configitem(item: str) -> ConfigItem:
 
     # Decode bytes and parse JSON if needed
     config_raw = r.hgetall("config:app")
@@ -15,8 +16,6 @@ def get_all_config():
             print(f"Decode error in key {key}")
             config[key] = val
 
-    return config
+    return ConfigItem(key=item, value=config[item])
 
-def update_config(new_data):
-    for k, v in new_data.items():
-        r.set(k, v)
+
