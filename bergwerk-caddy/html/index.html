@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bergwerk</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', Arial, sans-serif;
             display: flex;
             flex-direction: column;
         }
@@ -15,7 +16,7 @@
         .container {
             display: flex;
             flex-wrap: nowrap;
-            height: 100vh;
+            min-height: 100vh;
         }
 
         .sidebar {
@@ -39,6 +40,7 @@
             padding: 15px;
             background-color: #fff;
             position: relative;
+            font-family: 'Open Sans', Arial, sans-serif;
         }
 
         .chat-frame {
@@ -93,6 +95,22 @@
                 flex-direction: column;
             }
         }
+
+        .documentation-link {
+            margin-top: 20px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .documentation-link a {
+            color: #0078D4;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .documentation-link a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -101,8 +119,11 @@
 
         </div>
         <div class="content">
-            <h1>Welcome to Bergwerk!</h1>
-            <p>Installation was successful.</p>
+            <h1>Welcome to your Bergwerk!</h1>
+            <p>The installation was successful.</p>
+            <div class="documentation-link">
+                <p>For more information, visit our <a href="https://bergwerk.readthedocs.io/en/latest/" target="_blank">documentation</a>.</p>
+            </div>
         </div>
         <div class="sidebar right-sidebar" id="right-sidebar">
         </div>
