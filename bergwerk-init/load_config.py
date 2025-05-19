@@ -15,10 +15,8 @@ def load_config(yaml_path="config.yaml", redis_host="redis"):
         else:
             config[key] = str(value)
 
-    # Connect to Redis
     r = redis.Redis(host=redis_host, port=6379, db=0)
 
-    # Load into Redis hash
     r.hset("config:app", mapping=config)
     print(f"Loaded config into Redis: {config}")
 

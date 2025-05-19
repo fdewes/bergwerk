@@ -1,5 +1,5 @@
-Flask
-Flask-WTF
-Flask-Bootstrap
+fastapi[standard]
+passlib[bcrypt]
+pyjwt
 requests
 redis

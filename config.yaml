@@ -4,6 +4,8 @@ initial_greeting: Um den Chatbot nutzen zu können, müssen Sie bitte unserer Da
 
 inactivity_timer: 60
 
+ollama_api_url: http://ollama:11434
+
 English_llm_models_training_list: 
   - deepseek-r1:1.5b
   - deepseek-r1:7b
