@@ -1,18 +1,15 @@
-from fastapi import FastAPI, Request, Form, UploadFile, File
+from fastapi import Depends, FastAPI, Request, Form, UploadFile, File
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from redis_config import get_all_config, update_config
 from auth import check_auth
-import os
-import requests
-
-
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
-from fastapi import FastAPI
 import os
+import requests
+
 
 class RootPathMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
@@ -22,29 +19,16 @@ class RootPathMiddleware(BaseHTTPMiddleware):
         response = await call_next(request)
         return response
 
-app = FastAPI()  # Important for Caddy proxy path handling
+app = FastAPI() 
 app.add_middleware(RootPathMiddleware)
 
 templates = Jinja2Templates(directory="templates")
-
-#init_defaults()
-
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     check_auth(request)
     config = get_all_config()
     return templates.TemplateResponse("index.html", {"request": request, "config": config})
-
-
-# @app.get("/", response_class=HTMLResponse)
-# async def index(request: Request):
-#     try:
-#         check_auth(request)
-#         config = get_all_config()
-#         return templates.TemplateResponse("index.html", {"request": request, "config": config})
-#     except:
-#         return templates.TemplateResponse("login.html", {"request": request})
 
 @app.post("/login")
 async def login(request: Request, user: str = Form(...), password: str = Form(...)):
