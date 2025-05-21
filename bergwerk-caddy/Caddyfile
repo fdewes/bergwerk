@@ -11,7 +11,7 @@
     }
 
     handle /admin* {
-    reverse_proxy admin:8000 {
+    reverse_proxy admin:80 {
         header_up X-Forwarded-Prefix /admin
     }
     }
