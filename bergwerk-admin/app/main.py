@@ -201,7 +201,50 @@ async def read_own_items(
 async def index(request: Request):
     token = request.cookies.get("access_token")
     if not token:
-        return RedirectResponse("/login")
+        return RedirectResponse("/admin/login")
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username = payload.get("sub")
+        if not username:
+            raise HTTPException(status_code=401, detail="Invalid token")
+        user = get_user(fake_users_db, username)
+        if not user or user.disabled:
+            raise HTTPException(status_code=401, detail="Invalid user")
+    except InvalidTokenError:
+        return RedirectResponse("/admin/login")
+
+    config = get_all_config()
+    return templates.TemplateResponse("index.html", {"request": request, "config": config, "user": user})
+
+
+@app.post("/upload")
+async def upload_file(request: Request, file: UploadFile = File(...)):
+    token = request.cookies.get("access_token")
+    if not token:
+        return RedirectResponse("/admin/login")
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username = payload.get("sub")
+        if not username:
+            raise HTTPException(status_code=401, detail="Invalid token")
+        user = get_user(fake_users_db, username)
+        if not user or user.disabled:
+            raise HTTPException(status_code=401, detail="Invalid user")
+    except InvalidTokenError:
+        return RedirectResponse("/admin/login")
+    
+    content = await file.read()
+    files = {'file': (file.filename, content, 'multipart/form-data')}
+    response = requests.post("http://api/admin/import/", files=files)
+    return JSONResponse({"filename": file.filename, "size": len(content)})
+
+@app.get("/trigger/build")
+async def build_intent_classifier(request: Request):
+    token = request.cookies.get("access_token")
+    if not token:
+        return RedirectResponse("/admin/login")
 
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -213,38 +256,69 @@ async def index(request: Request):
             raise HTTPException(status_code=401, detail="Invalid user")
     except InvalidTokenError:
         return RedirectResponse("/login")
-
-    config = get_all_config()
-    return templates.TemplateResponse("index.html", {"request": request, "config": config, "user": user})
-
-
-@app.post("/upload")
-async def upload_file(file: UploadFile = File(...)):
-    content = await file.read()
-    files = {'file': (file.filename, content, 'multipart/form-data')}
-    response = requests.post("http://api/admin/import/", files=files)
-    return JSONResponse({"filename": file.filename, "size": len(content)})
-
-@app.get("/trigger/build")
-async def build_intent_classifier():
+    
     response = requests.get("http://api/admin/build_intent_classifier/")
     return JSONResponse({"message": response.text})
 
 @app.get("/trigger/export")
-async def trigger_export():
+async def trigger_export(request: Request):
+    token = request.cookies.get("access_token")
+    if not token:
+        return RedirectResponse("/admin/login")
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username = payload.get("sub")
+        if not username:
+            raise HTTPException(status_code=401, detail="Invalid token")
+        user = get_user(fake_users_db, username)
+        if not user or user.disabled:
+            raise HTTPException(status_code=401, detail="Invalid user")
+    except InvalidTokenError:
+        return RedirectResponse("/login")
+    
     response = requests.get("http://api/admin/export/")
     with open("export.json", "wb") as f:
         f.write(response.content)
     return FileResponse("export.json", filename="export.json", media_type='application/json')
 
 @app.get("/trigger/generate")
-async def trigger_generate():
+async def trigger_generate(request: Request):
+    token = request.cookies.get("access_token")
+    if not token:
+        return RedirectResponse("/admin/login")
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username = payload.get("sub")
+        if not username:
+            raise HTTPException(status_code=401, detail="Invalid token")
+        user = get_user(fake_users_db, username)
+        if not user or user.disabled:
+            raise HTTPException(status_code=401, detail="Invalid user")
+    except InvalidTokenError:
+        return RedirectResponse("/admin/login")
+
     response = requests.get("http://api/llm/llm_training_data/")
     return JSONResponse({"message": response.text})
 
 @app.post("/config/update")
 async def config_update(request: Request):
-    check_auth(request)
+    token = request.cookies.get("access_token")
+    if not token:
+        return RedirectResponse("/admin/login")
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username = payload.get("sub")
+        if not username:
+            raise HTTPException(status_code=401, detail="Invalid token")
+        user = get_user(fake_users_db, username)
+        if not user or user.disabled:
+            raise HTTPException(status_code=401, detail="Invalid user")
+    except InvalidTokenError:
+        return RedirectResponse("/admin/login")
+
     form = await request.form()
     update_config(dict(form))
     return RedirectResponse(request.scope.get("root_path") + "/", status_code=302)
