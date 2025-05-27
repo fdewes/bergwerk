@@ -5,25 +5,89 @@ from typing import Annotated
 from fastapi import Depends
 from models.models import *
 import jwt
+from models.models import User
 
-# to get a string like this run:
-# openssl rand -hex 32
+import requests 
+
+# fake_users_db = {
+#     "johndoe": {
+#         "username": "johndoe",
+#         "full_name": "John Doe",
+#         "email": "johndoe@example.com",
+#         "hashed_password": "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW",
+#         "disabled": False,
+#     }
+# }
+
+users_db = {}
+
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
-
-fake_users_db = {
-    "johndoe": {
-        "username": "johndoe",
-        "full_name": "John Doe",
-        "email": "johndoe@example.com",
-        "hashed_password": "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW",
-        "disabled": False,
-    }
-}
+MEDIAWIKI_API_URL = "http://wiki/w/api.php"
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+class MediaWikiAuth:
+    def __init__(self, api_url):
+        self.api_url = api_url
+        self.session = requests.Session()
+
+    def get_login_token(self):
+        """Step 1: Get login token"""
+        params = {
+            "action": "query",
+            "meta": "tokens",
+            "type": "login",
+            "format": "json"
+        }
+        response = self.session.get(self.api_url, params=params)
+        response.raise_for_status()
+        return response.json()["query"]["tokens"]["logintoken"]
+
+    def login(self, username, password):
+        """Step 2: Login with username/password"""
+        token = self.get_login_token()
+        data = {
+            "action": "login",
+            "lgname": username,
+            "lgpassword": password,
+            "lgtoken": token,
+            "format": "json"
+        }
+        response = self.session.post(self.api_url, data=data)
+        response.raise_for_status()
+        result = response.json()
+
+        if result.get("login", {}).get("result") == "Success":
+            return True
+        else:
+            print("Login failed:", result)
+            return False
+
+    def is_user_admin(self, username):
+        """Step 3: Check if user is in 'sysop' group"""
+        params = {
+            "action": "query",
+            "list": "users",
+            "ususers": username,
+            "usprop": "groups",
+            "format": "json"
+        }
+        response = self.session.get(self.api_url, params=params)
+        response.raise_for_status()
+        user_data = response.json()["query"]["users"][0]
+        return "sysop" in user_data.get("groups", [])
+
+
+def authenticate_admin(username, password):
+    auth = MediaWikiAuth(MEDIAWIKI_API_URL)
+    if not auth.login(username, password):
+        return False
+    if not auth.is_user_admin(username):
+        return False
+    return True
+
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
@@ -33,19 +97,18 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 
-def get_user(db, username: str):
-    if username in db:
-        user_dict = db[username]
-        return UserInDB(**user_dict)
+def get_user(username: str):
+    if username in users_db:
+        user = users_db[username]
+        return user
 
 
-def authenticate_user(fake_db, username: str, password: str):
-    user = get_user(fake_db, username)
-    if not user:
-        return False
-    if not verify_password(password, user.hashed_password):
-        return False
-    return user
+def authenticate_user(username: str, password: str):
+    if not authenticate_admin(username, password):
+        return False 
+    user =  User(username=username)
+    users_db[username] = user
+    return user 
 
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None):

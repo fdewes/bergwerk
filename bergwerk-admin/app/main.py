@@ -57,7 +57,7 @@ async def login_submit(request: Request, username: str = Form(...), password: st
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> Token:
-    user = authenticate_user(fake_users_db, form_data.username, form_data.password)
+    user = authenticate_user(form_data.username, form_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -95,8 +95,8 @@ async def index(request: Request):
         username = payload.get("sub")
         if not username:
             raise HTTPException(status_code=401, detail="Invalid token")
-        user = get_user(fake_users_db, username)
-        if not user or user.disabled:
+        user = get_user(username)
+        if not user:
             raise HTTPException(status_code=401, detail="Invalid user")
     except InvalidTokenError:
         return RedirectResponse("/admin/login")
@@ -116,8 +116,8 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
         username = payload.get("sub")
         if not username:
             raise HTTPException(status_code=401, detail="Invalid token")
-        user = get_user(fake_users_db, username)
-        if not user or user.disabled:
+        user = get_user(username)
+        if not user:
             raise HTTPException(status_code=401, detail="Invalid user")
     except InvalidTokenError:
         return RedirectResponse("/admin/login")
@@ -138,8 +138,8 @@ async def build_intent_classifier(request: Request):
         username = payload.get("sub")
         if not username:
             raise HTTPException(status_code=401, detail="Invalid token")
-        user = get_user(fake_users_db, username)
-        if not user or user.disabled:
+        user = get_user(username)
+        if not user:
             raise HTTPException(status_code=401, detail="Invalid user")
     except InvalidTokenError:
         return RedirectResponse("/login")
@@ -158,8 +158,8 @@ async def trigger_export(request: Request):
         username = payload.get("sub")
         if not username:
             raise HTTPException(status_code=401, detail="Invalid token")
-        user = get_user(fake_users_db, username)
-        if not user or user.disabled:
+        user = get_user(username)
+        if not user:
             raise HTTPException(status_code=401, detail="Invalid user")
     except InvalidTokenError:
         return RedirectResponse("/login")
@@ -180,8 +180,8 @@ async def trigger_generate(request: Request):
         username = payload.get("sub")
         if not username:
             raise HTTPException(status_code=401, detail="Invalid token")
-        user = get_user(fake_users_db, username)
-        if not user or user.disabled:
+        user = get_user(username)
+        if not user:
             raise HTTPException(status_code=401, detail="Invalid user")
     except InvalidTokenError:
         return RedirectResponse("/admin/login")
@@ -200,8 +200,8 @@ async def config_update(request: Request):
         username = payload.get("sub")
         if not username:
             raise HTTPException(status_code=401, detail="Invalid token")
-        user = get_user(fake_users_db, username)
-        if not user or user.disabled:
+        user = get_user(username)
+        if not user:
             raise HTTPException(status_code=401, detail="Invalid user")
     except InvalidTokenError:
         return RedirectResponse("/admin/login")
