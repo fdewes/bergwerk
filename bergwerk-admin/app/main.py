@@ -30,7 +30,7 @@ async def login_form(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
 @app.post("/login")
-@limiter.limit("20/hour")
+@limiter.limit("10/hour;50/day")
 async def login_submit(request: Request, username: str = Form(...), password: str = Form(...)):
     form_data = OAuth2PasswordRequestForm(
         username=username,
