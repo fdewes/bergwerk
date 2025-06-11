@@ -30,7 +30,7 @@ async def login_form(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
 @app.post("/login")
-@limiter.limit("5/minute")
+@limiter.limit("20/hour")
 async def login_submit(request: Request, username: str = Form(...), password: str = Form(...)):
     form_data = OAuth2PasswordRequestForm(
         username=username,
@@ -46,10 +46,10 @@ async def login_submit(request: Request, username: str = Form(...), password: st
         response.set_cookie(
             key="access_token",
             value=token.access_token,
-            httponly=True,         # Important for security
-            max_age=1800,          # 30 minutes
+            httponly=True,         
+            max_age=1800,          
             path="/",
-            secure=False,          # Set to True if using HTTPS
+            secure=False,          
             samesite="lax",
         )
         return response
