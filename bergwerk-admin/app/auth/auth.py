@@ -19,7 +19,6 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 MEDIAWIKI_API_URL = "http://wiki/w/api.php"
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 class MediaWikiAuth:
     def __init__(self, api_url):
@@ -81,13 +80,6 @@ def authenticate_admin(username, password):
         return False
     return True
 
-
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
-
-
-def get_password_hash(password):
-    return pwd_context.hash(password)
 
 
 def get_user(username: str):
