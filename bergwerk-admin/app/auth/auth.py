@@ -1,4 +1,3 @@
-from passlib.context import CryptContext
 import redis
 from fastapi.security import OAuth2PasswordBearer
 from datetime import datetime, timedelta, timezone
@@ -7,7 +6,6 @@ from fastapi import Depends
 from models.models import *
 import jwt
 from models.models import User
-
 import requests 
 
 r = redis.Redis(host='redis', port=6379, decode_responses=True, db=0)
