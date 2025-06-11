@@ -3,3 +3,4 @@ passlib[bcrypt]
 pyjwt
 requests
 redis
+slowapi

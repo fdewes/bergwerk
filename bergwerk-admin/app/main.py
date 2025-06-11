@@ -14,17 +14,23 @@ from fastapi import Form
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import RedirectResponse
 
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
     
 app = FastAPI()
 app.add_middleware(RootPathMiddleware)
 templates = Jinja2Templates(directory="templates")
-
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 @app.get("/login", response_class=HTMLResponse)
 async def login_form(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
 @app.post("/login")
+@limiter.limit("5/minute")
 async def login_submit(request: Request, username: str = Form(...), password: str = Form(...)):
     form_data = OAuth2PasswordRequestForm(
         username=username,
