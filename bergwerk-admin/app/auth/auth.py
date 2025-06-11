@@ -1,4 +1,5 @@
 from passlib.context import CryptContext
+import redis
 from fastapi.security import OAuth2PasswordBearer
 from datetime import datetime, timedelta, timezone
 from typing import Annotated
@@ -9,19 +10,11 @@ from models.models import User
 
 import requests 
 
-# fake_users_db = {
-#     "johndoe": {
-#         "username": "johndoe",
-#         "full_name": "John Doe",
-#         "email": "johndoe@example.com",
-#         "hashed_password": "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW",
-#         "disabled": False,
-#     }
-# }
+r = redis.Redis(host='redis', port=6379, decode_responses=True, db=0)
 
 users_db = {}
 
-SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
+SECRET_KEY = r.hget("config:app", "secret_key")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 MEDIAWIKI_API_URL = "http://wiki/w/api.php"

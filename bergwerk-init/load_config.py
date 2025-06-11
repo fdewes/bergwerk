@@ -1,13 +1,16 @@
 import yaml
 import redis
 import json
+import secrets
 
-def load_config(yaml_path="config.yaml", redis_host="redis"):
+def generate_secret_key(length=64):
+    return secrets.token_hex(length // 2)
+
+def init_config(yaml_path="config.yaml", redis_host="redis"):
     # Read YAML
     with open(yaml_path, 'r') as file:
         raw_config = yaml.safe_load(file)
 
-    # Serialize any lists/dicts as JSON strings
     config = {}
     for key, value in raw_config.items():
         if isinstance(value, (list, dict)):
@@ -15,10 +18,14 @@ def load_config(yaml_path="config.yaml", redis_host="redis"):
         else:
             config[key] = str(value)
 
+    config['secret_key'] = generate_secret_key()
+
+    print("Generated secret key:", config['secret_key'])
+
     r = redis.Redis(host=redis_host, port=6379, db=0)
 
     r.hset("config:app", mapping=config)
     print(f"Loaded config into Redis: {config}")
 
 if __name__ == "__main__":
-    load_config()
+    init_config()
