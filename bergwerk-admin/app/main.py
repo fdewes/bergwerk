@@ -39,7 +39,7 @@ async def login_submit(request: Request, username: str = Form(...), password: st
         client_secret=None,
     )
     try:
-        token = await login_for_access_token(form_data)
+        token = await login_for_access_token(request, form_data)
 
         response = RedirectResponse(url=request.scope.get("root_path", "") + "/", status_code=302)
         response.set_cookie(
@@ -59,7 +59,8 @@ async def login_submit(request: Request, username: str = Form(...), password: st
 
 
 @app.post("/token")
-async def login_for_access_token(
+@limiter.limit("10/hour;50/day")
+async def login_for_access_token(request: Request,
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> Token:
     user = authenticate_user(form_data.username, form_data.password)
