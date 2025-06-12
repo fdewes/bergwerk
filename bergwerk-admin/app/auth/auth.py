@@ -80,12 +80,6 @@ def authenticate_admin(username, password):
 
 
 
-def get_user(username: str):
-    if username in users_db:
-        user = users_db[username]
-        return user
-
-
 def authenticate_user(username: str, password: str):
     if not authenticate_admin(username, password):
         return False 

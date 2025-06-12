@@ -48,6 +48,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
+      - "443:443/udp"
     volumes:
       - ./bergwerk-caddy/Caddyfile:/etc/caddy/Caddyfile
       - ./bergwerk-caddy/html:/var/www/html

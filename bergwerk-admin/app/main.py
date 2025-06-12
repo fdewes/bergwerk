@@ -5,7 +5,6 @@ import requests
 import jwt
 from jwt.exceptions import InvalidTokenError
 from typing import Annotated
-from passlib.context import CryptContext
 from redis_config import get_all_config, update_config
 from fastapi import Depends, FastAPI, Request, Form, UploadFile, File, HTTPException, status
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse, FileResponse
@@ -77,19 +76,6 @@ async def login_for_access_token(
     return Token(access_token=access_token, token_type="bearer")
 
 
-@app.get("/users/me/", response_model=User)
-async def read_users_me(
-    current_user: Annotated[User, Depends(get_current_active_user)],
-):
-    return current_user
-
-
-@app.get("/users/me/items/")
-async def read_own_items(
-    current_user: Annotated[User, Depends(get_current_active_user)],
-):
-    return [{"item_id": "Foo", "owner": current_user.username}]
-
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     token = request.cookies.get("access_token")
@@ -101,14 +87,11 @@ async def index(request: Request):
         username = payload.get("sub")
         if not username:
             raise HTTPException(status_code=401, detail="Invalid token")
-        user = get_user(username)
-        if not user:
-            raise HTTPException(status_code=401, detail="Invalid user")
     except InvalidTokenError:
         return RedirectResponse("/admin/login")
 
     config = get_all_config()
-    return templates.TemplateResponse("index.html", {"request": request, "config": config, "user": user})
+    return templates.TemplateResponse("index.html", {"request": request, "config": config})
 
 
 @app.post("/upload")
@@ -122,9 +105,6 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
         username = payload.get("sub")
         if not username:
             raise HTTPException(status_code=401, detail="Invalid token")
-        user = get_user(username)
-        if not user:
-            raise HTTPException(status_code=401, detail="Invalid user")
     except InvalidTokenError:
         return RedirectResponse("/admin/login")
     
@@ -144,9 +124,6 @@ async def build_intent_classifier(request: Request):
         username = payload.get("sub")
         if not username:
             raise HTTPException(status_code=401, detail="Invalid token")
-        user = get_user(username)
-        if not user:
-            raise HTTPException(status_code=401, detail="Invalid user")
     except InvalidTokenError:
         return RedirectResponse("/login")
     
@@ -164,9 +141,6 @@ async def trigger_export(request: Request):
         username = payload.get("sub")
         if not username:
             raise HTTPException(status_code=401, detail="Invalid token")
-        user = get_user(username)
-        if not user:
-            raise HTTPException(status_code=401, detail="Invalid user")
     except InvalidTokenError:
         return RedirectResponse("/login")
     
@@ -186,9 +160,6 @@ async def trigger_generate(request: Request):
         username = payload.get("sub")
         if not username:
             raise HTTPException(status_code=401, detail="Invalid token")
-        user = get_user(username)
-        if not user:
-            raise HTTPException(status_code=401, detail="Invalid user")
     except InvalidTokenError:
         return RedirectResponse("/admin/login")
 
@@ -206,9 +177,6 @@ async def config_update(request: Request):
         username = payload.get("sub")
         if not username:
             raise HTTPException(status_code=401, detail="Invalid token")
-        user = get_user(username)
-        if not user:
-            raise HTTPException(status_code=401, detail="Invalid user")
     except InvalidTokenError:
         return RedirectResponse("/admin/login")
 
