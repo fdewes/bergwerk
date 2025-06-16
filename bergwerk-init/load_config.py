@@ -18,14 +18,18 @@ def init_config(yaml_path="config.yaml", redis_host="redis"):
         else:
             config[key] = str(value)
 
-    config['secret_key'] = generate_secret_key()
+    secrets = {}
+    secrets['secret_key'] = generate_secret_key()
 
-    print("Generated secret key:", config['secret_key'])
 
     r = redis.Redis(host=redis_host, port=6379, db=0)
 
     r.hset("config:app", mapping=config)
+    r.hset("config:sec", mapping=secrets)
     print(f"Loaded config into Redis: {config}")
+
+    print("Generated secret key:", secrets['secret_key'])
+
 
 if __name__ == "__main__":
     init_config()

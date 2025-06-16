@@ -10,9 +10,8 @@ import requests
 
 r = redis.Redis(host='redis', port=6379, decode_responses=True, db=0)
 
-users_db = {}
 
-SECRET_KEY = r.hget("config:app", "secret_key")
+SECRET_KEY = r.hget("config:sec", "secret_key")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 MEDIAWIKI_API_URL = "http://wiki/w/api.php"
@@ -84,7 +83,6 @@ def authenticate_user(username: str, password: str):
     if not authenticate_admin(username, password):
         return False 
     user =  User(username=username)
-    users_db[username] = user
     return user 
 
 
