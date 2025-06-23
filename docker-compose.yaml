@@ -1,53 +1,58 @@
 services:
-  bergwerk-wiki:
+  wiki:
     env_file:
       - config.env
     build:
       context: ./bergwerk-wiki
-    container_name: bergwerk-wiki
+    container_name: wiki
+    restart: always
     networks:
       - netzwerk
     depends_on:
-      bergwerk-db:
+      db:
         condition: service_healthy
 
-  bergwerk-api:
+  api:
     env_file:
       - config.env
     build:
       context: ./bergwerk-api
-    container_name: bergwerk-api
+    container_name: api
+    restart: always
     volumes:
       - ./bergwerk-api/app:/app  
     networks:
       - netzwerk
     depends_on:
-      bergwerk-wiki:
+      wiki:
         condition: service_started
 
-  bergwerk-socketio:
+  socketio:
     build:
       context: ./bergwerk-socketio
-    container_name: bergwerk-socketio
+    container_name: socketio
+    restart: always
     volumes:
       - ./bergwerk-socketio/app:/app
     networks:
       - netzwerk
     depends_on:
-      bergwerk-wiki:
+      wiki:
         condition: service_started
-      bergwerk-api:
+      api:
         condition: service_started
 
 
-  bergwerk-caddy:
+  caddy:
     image: caddy:latest
     env_file:
       - config.env
-    container_name: bergwerk-caddy
+    container_name: caddy
+    restart: always
     ports:
       - "80:80"
       - "443:443"
+      - "443:443/udp"
     volumes:
       - ./bergwerk-caddy/Caddyfile:/etc/caddy/Caddyfile
       - ./bergwerk-caddy/html:/var/www/html
@@ -56,20 +61,31 @@ services:
     networks:
       - netzwerk
     depends_on:
-      bergwerk-wiki:
+      wiki:
         condition: service_started
-      bergwerk-api:
+      api:
         condition: service_started
-      bergwerk-socketio:
+      socketio:
         condition: service_started
 
+  admin:
+    build: ./bergwerk-admin
+    restart: always
+    container_name: admin
+    depends_on:
+      - redis
+    volumes:
+      - ./bergwerk-admin/app:/app
+    networks:
+      - netzwerk
 
-  bergwerk-db:
+  db:
     env_file:
       - config.env
     build:
       context: ./bergwerk-db
-    container_name: bergwerk-db
+    container_name: db
+    restart: always
     ports:
       - "3306:3306"
     volumes:
@@ -81,22 +97,54 @@ services:
         timeout: 20s
         retries: 10
 
-  bergwerk-cron:
+  cron:
     env_file:
       - config.env
     build:
       context: ./bergwerk-cron
-    container_name: bergwerk-cron
+    container_name: cron
+    restart: always
     volumes:
       - ./bergwerk-cron/app:/usr/src/app
     networks:
       - netzwerk
     depends_on:
-      bergwerk-wiki:
+      wiki:
         condition: service_started
-      bergwerk-db:
+      db:
         condition: service_healthy
 
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - ./persist/ollama_code:/code
+      - ./persist/ollama:/root/.ollama
+    container_name: ollama
+    pull_policy: always
+    tty: true
+    restart: always
+    environment:
+      - OLLAMA_KEEP_ALIVE=24h
+      - OLLAMA_HOST=0.0.0.0
+    networks:
+      - netzwerk
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    networks:
+      - netzwerk
+
+  init:
+    build: ./bergwerk-init
+    depends_on:
+      - redis
+    command: ["python", "load_config.py"]
+    volumes:
+      - ./config.yaml:/app/config.yaml
+    networks:
+      - netzwerk
 
 networks:
   netzwerk:

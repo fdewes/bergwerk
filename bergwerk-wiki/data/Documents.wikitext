@@ -1,0 +1,18 @@
+[[Category:Content]]
+
+= Deutsch =
+== Markdown ==
+<markdown>
+Hin und wieder werden Sie Dokumente einreichen müssen oder Bescheinigungen für Ihr Studium benötigen.
+Hier finden Sie Informationen zu den häufigsten Dokumentenarten.
+</markdown>
+
+= English =
+== Markdown ==
+<markdown>
+Occasionally, you will need to submit documents or obtain certificates for your studies. 
+Here you will find information about the most common types of documents:
+</markdown>
+
+= Training Questions =
+

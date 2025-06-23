@@ -14,7 +14,7 @@ while true; do
         --dbname wiki_db \
         --dbuser $SQL_USERNAME \
         --dbpass $SQL_PASSWORD \
-        --dbserver bergwerk-db \
+        --dbserver db \
         --pass $MEDIAWIKI_ADMIN_PASSWORD \
         chatbot_wiki admin
     
@@ -27,7 +27,8 @@ while true; do
     fi
 done
 
-sudo -u www-data php maintenance/createAndPromote.php $BOT_USERNAME $BOT_PASSWORD --bot
+sudo -u www-data php maintenance/run.php createAndPromote $BOT_USERNAME $BOT_PASSWORD --bot
+
 
 echo "wfLoadExtension( 'VisualEditor' );" >> $WIKI_DIR/LocalSettings.php
 echo "wfLoadExtension( 'WikiMarkdown' );" >> $WIKI_DIR/LocalSettings.php
@@ -44,6 +45,7 @@ echo "\$wgHiddenPrefs[] = 'variant';" >> $WIKI_DIR/LocalSettings.php
 echo "\$wgHiddenPrefs[] = 'noconvertlink';" >> $WIKI_DIR/LocalSettings.php
 echo "\$wgLanguageCode = 'en';" >> $WIKI_DIR/LocalSettings.php    # 'de'
 echo "\$wgRateLimits['edit']['user'] = [ 1000, 60 ];" >> $WIKI_DIR/LocalSettings.php
+echo "\$wgEnableUploads = true;" >> $WIKI_DIR/LocalSettings.php
 
 git clone https://github.com/kuenzign/WikiMarkdown.git $WIKI_DIR/extensions/WikiMarkdown
 

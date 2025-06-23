@@ -3,7 +3,7 @@ import sys
 import requests
 from time import sleep
 
-API_URL = 'http://bergwerk-wiki/w/api.php'
+API_URL = 'http://wiki/w/api.php'
 USERNAME = os.getenv('BOT_USERNAME')
 PASSWORD = os.getenv('BOT_PASSWORD')
 
@@ -53,7 +53,8 @@ def create_or_update_page(session, csrf_token, title, content):
         'title': title,
         'text': content,
         'token': csrf_token,
-        'format': 'json'
+        'format': 'json',
+        'bot': 'True'
     })
     if 'error' in response.json():
         raise Exception(response.json()['error'])

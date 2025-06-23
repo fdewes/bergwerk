@@ -8,7 +8,7 @@ HTML = """
 Welcome to Bergwerk!
 """
 
-BW_URL = "http://bergwerk-api:80"
+BW_URL = "http://api:80"
 SIO_PORT = 5005
 
 # Create a Socket.IO server with enhanced logging

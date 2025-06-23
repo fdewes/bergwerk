@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
-import service.wiki as service
-import service.tracker as tracker 
+from  service import wiki as service_wiki
+from  service import config as service_config
+from  service import tracker as service_tracker 
 from model.menu import MenuResponse
 from model.textinput import TextInput
 from model.menuinput import MenuInput
@@ -20,7 +21,7 @@ def wiki_endpoint() -> str:
 @router.get("/config/")
 def get_config() -> list[ConfigItem]:
     try:
-        return service.get_config()
+        return service_wiki.get_config()
     except MissingPage as exc:
         raise HTTPException(status_code=404, detail=exc.msg)
     except MissingSection as exc:
@@ -33,7 +34,7 @@ def get_config() -> list[ConfigItem]:
 @router.get("/config/{configitem}/")
 def get_configitem(configitem: str) -> ConfigItem:
     try:
-        return service.get_configitem(configitem=configitem)
+        return service_config.get_configitem(configitem=configitem)
     except MissingPage as exc:
         raise HTTPException(status_code=404, detail=exc.msg)
     except MissingSection as exc:
@@ -45,10 +46,10 @@ def get_configitem(configitem: str) -> ConfigItem:
 @router.post("/menuinput")
 @router.post("/menuinput/")
 def get_menuinput(data: MenuInput) -> MenuResponse:
-    tracker.track_text(uid=data.uid, role="User", text="", buttons=data.menuinput)
+    service_tracker.track_text(uid=data.uid, role="User", text="", buttons=data.menuinput, language=data.language)
     try:
-        mr = service.get_page(page=data.menuinput, language=data.language)
-        tracker.track_text(uid=data.uid, role="Assistant", text=mr.text, buttons=str(mr.menuitems))
+        mr = service_wiki.get_page(page=data.menuinput, language=data.language)
+        service_tracker.track_text(uid=data.uid, role="Assistant", text=mr.text, buttons=str(mr.menuitems), language=data.language)
         return mr
     except MissingPage as exc:
         raise HTTPException(status_code=404, detail=exc.msg)
@@ -61,15 +62,15 @@ def get_menuinput(data: MenuInput) -> MenuResponse:
 @router.post("/textinput/")
 @router.post("/textinput")
 def get_textinput(data: TextInput) -> MenuResponse:
-    tracker.track_text(uid=data.uid, role="User", text=data.textinput, buttons="")
+    service_tracker.track_text(uid=data.uid, role="User", text=data.textinput, buttons="", language=data.language)
     try:
         try:
-            pc = service.predict(data.textinput)
+            pc = service_wiki.predict(data.textinput)
         except MissingClassifier:
             return MenuResponse(title="No intent classifier.", text="No intent classifier.", menuitems=[])
         page = pc[0]
-        mr = service.get_page(page=page.title, language=data.language)
-        tracker.track_text(uid=data.uid, role="Assistant", text=mr.text, buttons=str(mr.menuitems))
+        mr = service_wiki.get_page(page=page.title, language=data.language)
+        service_tracker.track_text(uid=data.uid, role="Assistant", text=mr.text, buttons=str(mr.menuitems),language=data.language)
         return mr
     except MissingPage as exc:
         raise HTTPException(status_code=404, detail=exc.msg)

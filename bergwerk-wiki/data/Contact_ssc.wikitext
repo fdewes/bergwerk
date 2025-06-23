@@ -1,0 +1,19 @@
+[[Category:Content]]
+
+= Deutsch =
+== Markdown ==
+<markdown>
+Sie erreichen das Service-Center während der telefonischen Beratungszeiten unter (040) 555-555. Wir stehen Ihnen zu den folgenden Zeiten zur Verfügung:
+- montags, mittwochs und freitags von 9-18 Uhr 
+- Sie können alternativ auch unser Kontaktformular nutzen oder persönlich vorbeikommen.
+
+= English =
+== Markdown ==
+<markdown>
+You can reach the Student Service Center during telephone consultation hours at (040) 555-555. We are available at the following times:
+- **Mondays, Wednesdays and Fridays from 9:00 AM to 11:30 AM**
+- Alternatively, you can also use our contact form or come in person.
+
+= Training Questions =
+
+

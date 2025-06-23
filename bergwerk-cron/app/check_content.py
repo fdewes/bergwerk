@@ -4,7 +4,7 @@ from datetime import datetime
 
 LANGUAGES =  ['Deutsch', 'English']
 
-HOST = "http://bergwerk-api/wiki/menuinput/"
+HOST = "http://api/wiki/menuinput/"
 
 def get_node(menuinput, language):
     try:

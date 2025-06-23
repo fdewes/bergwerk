@@ -9,6 +9,28 @@ import sys
 from time import sleep
 import mariadb
 
+class RedisSession:
+    """
+    Manages Redis connections and cursors.
+    """
+    def __init__(self):
+        self.connected = False
+        self.redis = None
+
+        while not self.connected:
+            try:
+                self.redis = self.login()
+                self.connected = True
+                print("Redis connection established.")
+            except requests.exceptions.RequestException as e:
+                print(f"Redis connection failed: {e}, retrying in 5 secs...")
+                sleep(5)
+
+    def login(self):
+        import redis
+        return redis.StrictRedis(host='redis', port=6379, db=0)
+
+
 class WikiSession:
     def __init__(self):
         self.session = None
@@ -27,7 +49,7 @@ class WikiSession:
 
     def login(self):
 
-        url = "http://bergwerk-wiki/w/api.php"
+        url = "http://wiki/w/api.php"
         session = requests.Session()
 
         # Get login token
@@ -82,7 +104,7 @@ class DatabaseSession:
             conn = mariadb.connect(
                 user=os.getenv('SQL_USERNAME'),
                 password=os.getenv('SQL_PASSWORD'),
-                host="bergwerk-db",
+                host="db",
                 port=3306,
                 database="tracker_db"
             )
@@ -101,7 +123,8 @@ class DatabaseSession:
             ts BIGINT,                     
             role VARCHAR(50),                          
             text TEXT,                                 
-            buttons TEXT
+            buttons TEXT,
+            language VARCHAR(20)
         );
         """
 

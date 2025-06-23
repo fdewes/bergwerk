@@ -2,26 +2,24 @@
 
 = Deutsch =
 == Markdown ==
-<markdown> 
-Ob Sie **Fragen** haben, **Unterstützung** benötigen oder einfach nur **erkunden** möchten – ich bin bereit, Ihnen zu helfen.  
-</markdown>
+<markdown>
+Bitte wählen Sie ein Themengebiet über die Buttons. Alternativ können Sie auch Ihre Fragen in das Textfeld tippen.</markdown>
 
 == Buttons ==
-
-* [[Products|Produkte]]
-* [[Customers|Kundenportal]]
-
+* [[Students|Studierende]]
+* [[Applicants|Bewerber*innen]]
+* [[Info|Chatbot-Info]]
 
 = English =
 == Markdown ==
 <markdown>
-Whether you have **questions**, need **assistance**, or just want to **explore**, I’m ready to help.  
-</markdown>
+Please select a topic using the buttons. Alternatively, you can also type your question in the text field.</markdown>
+
 
 == Buttons ==
+* [[Info|Chatbot Info]]
+* [[Students|Students]]
+* [[Applicants|Applicants]]
 
-* [[Products|Products]]
-* [[Customers|Customers]]
-
-
+= Training Questions =
 

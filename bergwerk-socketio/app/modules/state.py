@@ -1,30 +1,31 @@
+import redis
+import json
+
 class State:
 
     def __init__(self):
-        self.state = {}
+        self.redis_client = redis.Redis(host='redis', port=6379, db=0)
 
     def add_uid(self, uid):
-        self.state[uid] = {}
+        self.redis_client.hset(uid, "initialized", 1)
 
     def del_uid(self, uid):
-        if uid in self.state:
-            del self.state[uid]
+        self.redis_client.delete(uid)
 
     def check_uid(self, uid):
-        if uid in self.state:
-            return True
-        else:
-            return False
+        return self.redis_client.exists(uid) == 1
 
     def set_state(self, uid, k, v):
-        if uid in self.state:
-            self.state[uid][k] = v
+        if self.check_uid(uid):
+            v = json.dumps(v)
+            self.redis_client.hset(uid, k, v)
             return True
         else:
             return False
 
     def get_state(self, uid, k):
-        if uid in self.state and k in self.state[uid]:
-            return self.state[uid][k]
-        else:
-            return None
+        if self.check_uid(uid):
+            value = self.redis_client.hget(uid, k)
+            if value:
+                return json.loads(value)
+        return None

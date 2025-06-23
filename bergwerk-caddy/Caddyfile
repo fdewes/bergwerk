@@ -1,21 +1,20 @@
 {$SERVER} {
 
-
     root * /var/www/html
     file_server
 
-
-
     handle_path /wiki* {
-        reverse_proxy bergwerk-wiki:80
+        reverse_proxy wiki:80
     }
 
-    handle_path /api* {
-        reverse_proxy bergwerk-api:80
+    handle /admin* {
+    reverse_proxy admin:80 {
+        header_up X-Forwarded-Prefix /admin
+    }
     }
 
     handle /socket.io/* {
-        reverse_proxy bergwerk-socketio:5005
+        reverse_proxy socketio:5005
     }
 
     handle_errors {
@@ -24,8 +23,6 @@
         }
         rewrite @404 /404.html
         file_server
-
-
 
     }
 }
