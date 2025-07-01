@@ -8,13 +8,6 @@ from icecream import ic
 
 router = APIRouter(prefix="/admin")
 
-
-@router.get("")
-@router.get("/")
-def admin_endpoint() -> str:
-    return ":o"
-
-
 @router.get("/build_intent_classifier")
 @router.get("/build_intent_classifier/")
 def build_intent_classifier() -> None:
@@ -42,8 +35,6 @@ def export_json():
 @router.post("/import")
 @router.post("/import/")
 async def import_json(file: UploadFile):
-
-
     file_content = await file.read()
 
     try:
@@ -52,8 +43,5 @@ async def import_json(file: UploadFile):
         raise HTTPException(status_code=400, detail=f"Invalid JSON file: {e}")
 
     for title, text in deserialized_data.items():
-        if title.lower() in ("configuration", "token"):
-            print(f"Skipping {title}.")
-            continue
         print(f"Creating page {title}.")
         data_wiki.create_or_update_page(title, text)

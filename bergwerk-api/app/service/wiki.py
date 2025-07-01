@@ -3,43 +3,12 @@ from model.section import Section
 from model.menu import MenuItem, MenuResponse
 from model.configuration import ConfigItem
 from data import wiki as data_wiki
+from data import redis as data_redis
 from error import MissingLanguage, MissingClassifier
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 import pandas as pd
 from datetime import datetime
 import re
-
-def parse_configuration(content):
-    """
-    Parse the configuration content to extract key-value pairs.
-
-    Parameters:
-    - content: The raw content of the configuration page.
-
-    Returns:
-    - A dictionary with the configuration settings.
-    """
-    config = {}
-    lines = content.split('\n')
-    for line in lines:
-        match = re.match(r'(\w+)=([\s\S]+)', line)
-        if match:
-            key, value = match.groups()
-            config[key] = value
-    return config
-
-
-def get_configitem(configitem: str) -> ConfigItem:
-    config_page = data_wiki.get_config_page()
-    config = parse_configuration(config_page)
-    return ConfigItem(key=configitem, value=config[configitem])
-
-
-def get_config() -> list[ConfigItem]:
-    config_page = data_wiki.get_config_page()
-    config = parse_configuration(config_page)
-    l = [ConfigItem(key=key, value=value) for (key, value) in config.items()]
-    return l
 
 
 def get_language_specific_sections(page: str, language: str) -> list[Section]:
