@@ -3,7 +3,7 @@
 
 ## Overview
 
-**Bergwerk** is a user-friendly chatbot platform designed for easy setup and maintenance. It provides a simple way to manage chatbot content through a multi-user wiki system, making it accessible for non-technical users to contribute and update the chatbot’s knowledge base.
+[Bergwerk](https://github.com/HTW-Berlin-KI-Werkstatt/bergwerk) is a user-friendly chatbot platform designed for easy setup and maintenance. It provides a simple way to manage chatbot content through a multi-user wiki system, making it accessible for non-technical users to contribute and update the chatbot’s knowledge base.
 
 ## Key Features
 
@@ -34,7 +34,7 @@ cd bergwerk
 ### **2) Configure Environment Variables**:  
    Edit the `config.env` file located in the root directory. Set the required passwords for the following environment variables: `MEDIAWIKI_ADMIN_PASSWORD`, `BOT_PASSWORD`, and `SQL_PASSWORD`.
 
-**IMPORTANT: Use a mix of uppercase, lowercase, numbers, and special characters, at least 10 characters long. Using other passwords may result in failed installations.**
+**IMPORTANT: Use a mix of uppercase, lowercase, numbers, and special characters, at least 10 characters long. Using weak and/or short passwords may result in failed installations.**
 
 ```
 MEDIAWIKI_ADMIN=admin
