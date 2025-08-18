@@ -1,10 +1,8 @@
-import io
 from fastapi import APIRouter, HTTPException, Response, UploadFile
 from data import wiki as data_wiki
 from error import Unauthorized
 from datetime import datetime
 import json
-from icecream import ic
 
 router = APIRouter(prefix="/admin")
 

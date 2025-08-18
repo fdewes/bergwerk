@@ -8,7 +8,6 @@ from error import MissingLanguage, MissingClassifier
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 import pandas as pd
 from datetime import datetime
-import re
 
 
 def get_language_specific_sections(page: str, language: str) -> list[Section]:
