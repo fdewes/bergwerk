@@ -8,6 +8,10 @@ The documentation for using the software can be found here: [https://bergwerk.re
 
 This is where the [[Start|chatbot content]] is configured. This page also serves as an entry page for users.
 
+= Template =
+
+You can use the [[Template|content template]] to create your own pages.
+
 = Conversation Tracker =
 
 The [[Tracker|conversation tracker]] stores the chatbot’s previous queries and responses and can be used for analysis and improvement.

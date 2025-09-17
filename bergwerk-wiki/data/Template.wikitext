@@ -1,0 +1,31 @@
+[[Category:Content]]
+
+This is template for other content pages. 
+
+= Deutsch =
+== Markdown ==
+<markdown>
+Durch eigenen Inhalt ersetzen.
+</markdown>
+
+== Buttons ==
+
+* [[Students|Button 1]]
+* [[Students|Button 2]]
+
+= English =
+== Markdown ==
+<markdown>
+Replace this with your content.
+</markdown>
+
+== Buttons ==
+
+* [[Students|Button 1]]
+* [[Students|Button 2]]
+
+
+= Training Questions =
+
+* where can I find a template for my own content?
+* Template page 
