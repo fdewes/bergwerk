@@ -15,10 +15,10 @@ from datasets import Dataset
 from transformers import AutoTokenizer, DataCollatorWithPadding
 from transformers import TrainingArguments, Trainer
 from transformers import AutoModelForSequenceClassification
-from icecream import ic
 import yaml
 from .connections import WikiSession
 import threading
+import torch
 
 HOST = "http://wiki/w"
 wiki_session = WikiSession()
@@ -287,7 +287,6 @@ def import_pages(pages):
     """
     all_pages = yaml.safe_load(pages)
     for title, wikitext in all_pages:
-        ic(title)
         create_or_update_page(title, wikitext)
 
 
@@ -333,7 +332,6 @@ def build_intent_classifier_bg():
     """
 
     page_titles = get_all_pages()
-    ic(page_titles)
 
     training = {}
 
@@ -383,6 +381,7 @@ def build_intent_classifier_bg():
                                       num_train_epochs=15,
                                       save_strategy="no",
                                       per_device_train_batch_size=32)
+    
 
     lang_model = AutoModelForSequenceClassification.from_pretrained(
         chkpnt, num_labels=counter)
@@ -405,7 +404,6 @@ def build_intent_classifier_bg():
 
 
 if __name__ == "__main__":
-    from icecream import ic
     # export PYTHONPATH="${PYTHONPATH}:`pwd`"
     # build_intent_classifier("http://localHOST:8080")
-    ic(predict("what english proficiency?"))
+    predict("what english proficiency?")
