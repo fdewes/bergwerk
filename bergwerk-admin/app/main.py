@@ -92,6 +92,9 @@ async def index(request: Request):
         return RedirectResponse("/admin/login")
 
     config = get_all_config()
+
+    config = {k: v for k, v in config.items() if not k.startswith("lang")}
+
     return templates.TemplateResponse("index.html", {"request": request, "config": config})
 
 

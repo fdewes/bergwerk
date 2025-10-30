@@ -34,8 +34,8 @@ VOLUME ${DATA_DIR}
 # We work in WikiMedia root directory
 WORKDIR ${WIKI_DIR}
 
-
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    cron \
     python3-requests \
     jq \
     sudo \
@@ -57,6 +57,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     sqlite3 && \
     apt-get clean
+
+# add cronjob for deleting archived revisions
+
+COPY crontab /etc/cron.d/my-cron-job
+RUN chmod 0644 /etc/cron.d/my-cron-job
+RUN crontab /etc/cron.d/my-cron-job
+RUN touch /var/log/cron.log
 
 # MediaWiki setup
 RUN curl -fSL "https://releases.wikimedia.org/mediawiki/${MEDIAWIKI_MAJOR_VERSION}/mediawiki-${MEDIAWIKI_VERSION}.tar.gz" -o mediawiki.tar.gz \

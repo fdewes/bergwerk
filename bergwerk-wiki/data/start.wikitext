@@ -25,5 +25,4 @@ Please select a topic using the buttons. Alternatively, you can also type your q
 * [[Students|Students]]
 * [[Applicants|Applicants]]
 
-= Training Questions =
 

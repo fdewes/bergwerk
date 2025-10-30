@@ -19,6 +19,7 @@ import yaml
 from .connections import WikiSession
 import threading
 import torch
+import time
 
 HOST = "http://wiki/w"
 wiki_session = WikiSession()
@@ -339,8 +340,11 @@ def build_intent_classifier_bg():
         sections = get_sections(t)
         for section in sections:
             if section.line == "Training Questions":
-                training[t] = get_section_wikitext(
+
+                tq = get_section_wikitext(
                     t, section.index).wikitext
+                if tq != "= Training Questions =" and tq != "":
+                    training[t] = tq
 
     counter = 0
     i = 0
@@ -366,7 +370,7 @@ def build_intent_classifier_bg():
     dataset['sentence'] = sentences
 
     dataset = Dataset.from_dict(dataset)
-    train_test = dataset.train_test_split(train_size=.95)
+    train_test = dataset.train_test_split(train_size=.75)
 
     chkpnt = "rasa/LaBSE"
     tokenizer = AutoTokenizer.from_pretrained(chkpnt)
@@ -399,8 +403,15 @@ def build_intent_classifier_bg():
         tokenizer=tokenizer,
     )
 
+    print("Starting training intent classifier...", flush=True)
+    start_time = time.time()
+
     trainer.train()
     trainer.save_model()
+
+    end_time = time.time()
+    elapsed_time = int((end_time - start_time) // 60)  # Calculate elapsed time in minutes without decimals
+    print(f"Finished training intent classifier. Time taken: {elapsed_time} minutes.", flush=True)
 
 
 if __name__ == "__main__":
