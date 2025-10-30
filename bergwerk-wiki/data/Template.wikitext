@@ -24,8 +24,3 @@ Replace this with your content.
 * [[Students|Button 1]]
 * [[Students|Button 2]]
 
-
-= Training Questions =
-
-* where can I find a template for my own content?
-* Template page 

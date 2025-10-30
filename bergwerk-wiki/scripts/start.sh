@@ -8,6 +8,7 @@ fi
 
 service php8.3-fpm start 
 service nginx start 
+service cron start
 
 if [ ! -f /tmp/first_run_done ]; then
     python3 /usr/local/bin/load_data.py

@@ -3,6 +3,7 @@ import pandas as pd
 import requests
 import os
 import redis 
+import mariadb
 
 
 def sql2pd(database, table):
@@ -173,3 +174,72 @@ class Config:
         if value is None:
             raise KeyError(f"Key '{k}' not found in config:app")
         return value.replace("\\n\\n", "\n\n")
+    
+
+class DatabaseSession:
+    """
+    Manages database connections and cursors.
+    """
+    def __init__(self):
+        self.connected = False
+        self.cursor = None
+        self.conn = None        
+    
+        while not self.connected:
+            try:
+                self.cursor, self.conn = self.login()
+                self.connected = True
+                print("DB connection established.")
+            except requests.exceptions.RequestException as e:
+                print(f"DB connection failed: {e}, retrying in 5 secs...")
+                sleep(5)
+                
+
+    def login(self):
+
+        try:
+            conn = mariadb.connect(
+                user=os.getenv('SQL_USERNAME'),
+                password=os.getenv('SQL_PASSWORD'),
+                host="db",
+                port=3306,
+                database="tracker_db"
+            )
+
+        except mariadb.Error as e:
+            print(f"Error connecting to MariaDB Platform: {e}")
+            sys.exit(1)
+
+
+        cursor = conn.cursor()
+
+        create_table_query = """
+        CREATE TABLE IF NOT EXISTS tracker (
+            record_id INT AUTO_INCREMENT PRIMARY KEY,  
+            id VARCHAR(255),                          
+            ts BIGINT,                     
+            role VARCHAR(50),                          
+            text TEXT,                                 
+            buttons TEXT,
+            language VARCHAR(20)
+        );
+        """
+
+        try:
+            cursor.execute(create_table_query)
+            print("Table 'tracker' created successfully (or already exists).")
+        except mariadb.Error as e:
+            print(f"Error creating table: {e}")
+
+        conn.commit()
+
+        return cursor, conn
+    
+    def get_cursor_conn(self):
+
+        if self.conn.open:
+            return self.cursor, self.conn
+        else:
+            self.cursor, self.conn = self.login()
+            print("Reconnected to mysql.")
+            return self.cursor, self.conn

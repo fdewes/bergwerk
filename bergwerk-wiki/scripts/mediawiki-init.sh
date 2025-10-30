@@ -27,8 +27,7 @@ while true; do
     fi
 done
 
-sudo -u www-data php maintenance/run.php createAndPromote $BOT_USERNAME $BOT_PASSWORD --bot
-
+sudo -u www-data php maintenance/run.php createAndPromote $BOT_USERNAME $BOT_PASSWORD --bot --sysop 
 
 echo "wfLoadExtension( 'VisualEditor' );" >> $WIKI_DIR/LocalSettings.php
 echo "wfLoadExtension( 'WikiMarkdown' );" >> $WIKI_DIR/LocalSettings.php
@@ -38,7 +37,6 @@ echo "\$wgAllowMarkdownExtra = true;" >> $WIKI_DIR/LocalSettings.php
 echo "\$wgGroupPermissions['*']['read'] = false;" >> $WIKI_DIR/LocalSettings.php
 echo "\$wgGroupPermissions['*']['edit'] = false;" >> $WIKI_DIR/LocalSettings.php
 echo "\$wgGroupPermissions['*']['createaccount'] = false;" >> $WIKI_DIR/LocalSettings.php
-
 
 echo "\$wgHiddenPrefs[] = 'language';" >> $WIKI_DIR/LocalSettings.php
 echo "\$wgHiddenPrefs[] = 'variant';" >> $WIKI_DIR/LocalSettings.php

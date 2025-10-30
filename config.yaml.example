@@ -2,7 +2,7 @@ error_message: Oops! Something went wrong. Ups! Hier funktionert etwas nicht!
 
 initial_greeting: Um den Chatbot nutzen zu können, müssen Sie bitte unserer Datenschutzerklärung zustimmen. \n\n To proceed, please agree to our chatbot's privacy policy.
 
-inactivity_timer: 60
+keep_conversation_days: 180
 
 languages:
   English:

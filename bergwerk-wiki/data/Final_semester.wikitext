@@ -10,5 +10,3 @@ Hier gibt es weitere Informationen zum letzten Semester und zu Ihrer Abschlussar
 <markdown>
 Here is further information regarding the last semester and your thesis:</markdown>
 
-
-= Training Questions = 
