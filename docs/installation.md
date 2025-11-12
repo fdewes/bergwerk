@@ -30,6 +30,19 @@ If you changed the server hostname from `localhost` to something else, ensure yo
 
 For secure communication with the MySQL component, Bergwerk automatically creates a self-signed TLS certificate. This allows secure remote access to the MySQL server. Currently, it is not possible to use a certificate from a trusted certificate authority.
 
+```
+MEDIAWIKI_ADMIN=admin
+MEDIAWIKI_ADMIN_PASSWORD=secret
+
+BOT_USERNAME=bot
+BOT_PASSWORD=secret
+
+SQL_USERNAME=dbuser
+SQL_PASSWORD=secret
+
+SERVER=http://localhost
+```
+
 ### `./config.yaml`
 
 The `config.yaml` file is used to configure various chatbot settings. Below is an example configuration:

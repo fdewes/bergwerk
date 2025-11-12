@@ -80,8 +80,6 @@ services:
     build:
       context: ./bergwerk-db
     restart: always
-    ports:
-      - "3307:3306"
     volumes:
       - ./persist/db_data:/var/lib/mysql
     networks:
@@ -107,19 +105,6 @@ services:
       db:
         condition: service_healthy
 
-  # ollama:
-  #   image: ollama/ollama:latest
-  #   volumes:
-  #     - ./persist/ollama_code:/code
-  #     - ./persist/ollama:/root/.ollama
-  #   pull_policy: always
-  #   tty: true
-  #   restart: always
-  #   environment:
-  #     - OLLAMA_KEEP_ALIVE=24h
-  #     - OLLAMA_HOST=0.0.0.0
-  #   networks:
-  #     - netzwerk
 
   redis:
     image: redis:latest
