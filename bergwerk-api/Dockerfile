@@ -3,9 +3,6 @@ FROM python:3.12
 COPY ./app /app
 WORKDIR /app
 
-RUN pip3 install torch torchvision torchaudio
-#RUN pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
-
 COPY ./requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
 
